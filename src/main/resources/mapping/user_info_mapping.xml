@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mall.mapper.User_infoMapper">
+    <resultMap id="User_infoResultMap" type="com.mall.entity.User_info">
+        <result column="user_id" jdbcType="INTEGER" property="user_id" />
+        <result column="pwd" jdbcType="VARCHAR" property="pwd" />
+        <result column="user_name" jdbcType="VARCHAR" property="user_name" />
+        <result column="user_real_name" jdbcType="VARCHAR" property="user_real_name" />
+        <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+        <result column="card_id" jdbcType="VARCHAR" property="card_id" />
+        <result column="user_pro" jdbcType="VARCHAR" property="user_pro" />
+        <collection property="address_infoList"
+                    ofType="com.mall.entity.Address_info">
+            <id property="address_id" column="address_id"/>
+            <result property="address" column="address"/>
+            <result property="linkman" column="linkman"/>
+            <result property="telephone" column="telephone"/>
+            <result property="defaultAddress" column="defaultAddress"/>
+        </collection>
+    </resultMap>
+    <select id="checkLogin" resultType="int"
+            parameterType="com.mall.entity.User_info">
+        select count(*) as r from user_info
+        where user_name = #{user_name} and pwd = #{pwd}
+    </select>
+    <select id="checkLoginMultiParam" resultType="com.mall.entity.User_info">
+        select user_id, user_name  from user_info
+        where telephone = #{0} and pwd = #{1}
+    </select>
+    <select id="selUser_info" resultType="com.mall.entity.User_info">
+        select * from user_info where user_id=#{user_id}
+    </select>
+    <select id="selAll" resultType="com.mall.entity.User_info">
+        select * from user_info
+    </select>
+    <select id="selAllAddressOfUser" resultMap="User_infoResultMap"
+            parameterType="int">
+        select u.*, a.address_id, a.address,
+        a.linkman, a.telephone, a.defaultAddress
+        from user_info u, address_info a
+        where a.user_id=u.user_id and u.user_id=#{user_id}
+    </select>
+</mapper>

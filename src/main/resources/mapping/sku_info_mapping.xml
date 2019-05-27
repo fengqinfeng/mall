@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mall.mapper.Sku_infoMapper">
+    <resultMap id="Sku_infoResultMap"
+               type="com.mall.entity.Sku_info">
+        <result column="sku_id" jdbcType="INTEGER" property="sku_id" />
+        <result column="product_class_id" jdbcType="INTEGER" property="product_class_id" />
+        <result column="product_class_name" jdbcType="VARCHAR" property="product_class_name" />
+        <result column="p_image_path" jdbcType="VARCHAR" property="p_image_path" />
+        <result column="seller_id" jdbcType="INTEGER" property="seller_id" />
+        <result column="seller_name" jdbcType="VARCHAR" property="seller_name" />
+        <result column="user_select_property" jdbcType="VARCHAR" property="user_select_property" />
+        <result column="price" jdbcType="VARCHAR" property="price" />
+        <result column="amount" jdbcType="INTEGER" property="amount" />
+        <collection property="product_property_infoList"
+                    ofType="com.mall.entity.Product_property_info">
+            <id property="property_id" column="property_id"/>
+            <result property="product_class_id" column="product_class_id"/>
+            <result property="property_name" column="property_name"/>
+            <result property="property_value" column="property_value"/>
+            <result property="is_sale_property" column="is_sale_property"/>
+        </collection>
+    </resultMap>
+    <resultMap id="singleSku_info" type="com.mall.entity.Sku_info">
+        <result column="sku_id" jdbcType="INTEGER" property="sku_id" />
+        <result column="product_class_id" jdbcType="INTEGER" property="product_class_id" />
+        <result column="product_class_name" jdbcType="VARCHAR" property="product_class_name" />
+        <result column="p_image_path" jdbcType="VARCHAR" property="p_image_path" />
+        <result column="seller_id" jdbcType="INTEGER" property="seller_id" />
+        <result column="seller_name" jdbcType="VARCHAR" property="seller_name" />
+        <result column="user_select_property" jdbcType="VARCHAR" property="user_select_property" />
+        <result column="price" jdbcType="VARCHAR" property="price" />
+    </resultMap>
+    <select id="showSku_info_Detail" parameterType="int" resultMap="Sku_infoResultMap">
+        SELECT k.sku_id, k.product_class_id, k.price, k.amount,k.seller_id, s.seller_name, p.product_class_name, i.p_image_path,
+			pp.is_sale_property, pp.property_name, pp.property_value
+          from sku_info k INNER JOIN seller_info s on s.seller_id = k.seller_id
+          INNER JOIN product_class_info p ON p.product_class_id = k.product_class_id
+          INNER JOIN product_image_info i ON i.product_class_id = p.product_class_id
+		  INNER JOIN product_property_info pp ON k.sku_id = pp.sku_id
+          WHERE i.p_image_main = 1 and k.sku_id=#{sku_id}
+  </select>
+    <select id="getSingleSku_info" parameterType="int" resultMap="singleSku_info">
+        SELECT k.sku_id, k.product_class_id, k.price, k.amount,k.seller_id, s.seller_name, p.product_class_name, i.p_image_path
+          from sku_info k INNER JOIN seller_info s on s.seller_id = k.seller_id
+          INNER JOIN product_class_info p ON p.product_class_id = k.product_class_id
+          INNER JOIN product_image_info i ON i.product_class_id = p.product_class_id
+		  WHERE i.p_image_main = 1 and k.sku_id=#{sku_id}
+    </select>
+    <select id="qry_Sku_info"  resultMap="singleSku_info">
+         SELECT s.sku_id, s.amount, s.price, s.sale_number,
+         p.product_class_name, b.brand_ch_name, p.product_class_id,
+          b.class_id, i.p_image_path, s.seller_id, sl.seller_name
+        FROM sku_info s INNER JOIN product_class_info p ON
+                s.product_class_id = p.product_class_id
+				INNER JOIN brand_info b ON b.brand_id = p.brand_id
+        INNER JOIN product_image_info i on i.product_class_id=
+        p.product_class_id
+		  INNER JOIN seller_info sl on s.seller_id = sl.seller_id
+				where b.class_id = #{0} and i.p_image_main=1
+	ORDER BY ${sort}
+	LIMIT #{2}, #{3}
+  </select>
+    <select id="selSale_Number" resultType="int">
+        select sale_Number from sku_info where
+        sku_id = #{0}
+    </select>
+    <update id="updateSale_number">
+        update sku_info set sale_number = #{0}
+        where sku_id=#{1}
+    </update>
+</mapper>

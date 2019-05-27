@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mall.mapper.Address_infoMapper">
+    <resultMap id="Address_infoResultMap"
+               type="com.mall.entity.Address_info">
+        <result column="address_id" jdbcType="INTEGER" property="address_id" />
+        <result column="user_id" jdbcType="INTEGER" property="user_id" />
+        <result column="address" jdbcType="VARCHAR" property="address" />
+        <result column="linkman" jdbcType="VARCHAR" property="linkman" />
+        <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+        <result column="defaultAddress" jdbcType="INTEGER" property="defaultAddress" />
+    </resultMap>
+    <select id="selAllAddress" parameterType="int"
+                        resultType="com.mall.entity.Address_info">
+        select * from address_info where user_id=#{user_id}
+    </select>
+    <select id="selDefaultAddress"
+            resultType="com.mall.entity.Address_info">
+        select * from address_info where user_id=#{user_id}
+        and defaultAddress = 1
+    </select>
+    <insert id="insertAddress"
+            parameterType="com.mall.entity.Address_info"
+            useGeneratedKeys="true" keyProperty="address_id">
+        insert into address_info(user_id, address, linkman, telephone)
+        values (#{user_id}, #{address}, #{linkman}, #{telephone})
+    </insert>
+    <update id="updateAddress" parameterType="com.mall.entity.Address_info"
+            flushCache="true">
+        update address_info set linkman=#{linkman},
+                                 address=#{address},
+                                 telephone=#{telephone}
+        where address_id=#{address_id}
+    </update>
+
+
+</mapper>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mall.mapper.Order_itemMapper">
+    <resultMap id="Order_infoResultMap" type="com.mall.entity.Order_item_info">
+        <result column="order_id" jdbcType="INTEGER" property="order_id" />
+        <result column="order_item_id" jdbcType="INTEGER" property="order_item_id" />
+        <result column="sku_id" jdbcType="INTEGER" property="sku_id" />
+        <result column="price" jdbcType="DOUBLE" property="price" />
+        <result column="amount" jdbcType="INTEGER" property="amount" />
+        <result column="user_select_property" jdbcType="VARCHAR" property="user_select_property" />
+    </resultMap>
+    <insert id="insertOrderItem" parameterType="com.mall.entity.Order_item_info"
+            keyProperty="order_item_id" useGeneratedKeys="true">
+        insert into order_item_info(order_id,sku_id,price,amount,user_select_property)
+        values (#{order_id},#{sku_id},#{price},#{amount},#{user_select_property})
+    </insert>
+
+</mapper>

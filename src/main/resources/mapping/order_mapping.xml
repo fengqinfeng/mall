@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mall.mapper.OrderMapper">
+    <resultMap id="Order_infoResultMap" type="com.mall.entity.Order_info">
+        <result column="order_id" jdbcType="INTEGER" property="order_id" />
+        <result column="order_time" jdbcType="VARCHAR" property="order_time" />
+        <result column="user_id" jdbcType="INTEGER" property="user_id" />
+        <result column="seller_id" jdbcType="INTEGER" property="seller_id" />
+        <result column="allmoney" jdbcType="DOUBLE" property="allmoney" />
+        <result column="order_status" jdbcType="INTEGER" property="order_status" />
+        <result column="linkman" jdbcType="VARCHAR" property="linkman" />
+        <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+        <result column="address" jdbcType="VARCHAR" property="address" />
+        <result column="pya_date" jdbcType="VARCHAR" property="pya_date" />
+        <result column="send_date" jdbcType="VARCHAR" property="send_date" />
+        <result column="end_date" jdbcType="VARCHAR" property="end_date" />
+        <result column="user_say" jdbcType="VARCHAR" property="user_say" />
+        <result column="user_evaluation" jdbcType="VARCHAR" property="user_evaluation" />
+        <collection property="order_item_infoList"
+                    ofType="com.mall.entity.Order_item_info">
+            <id property="order_item_id" column="order_item_id"/>
+            <result property="sku_id" column="sku_id"/>
+            <result property="price" column="price"/>
+            <result property="amount" column="amount"/>
+            <result property="user_select_property" column="user_select_property"/>
+        </collection>
+    </resultMap>
+    <select id="selOrder_info" parameterType="int" resultMap="com.mall.mapper.OrderMapper.Order_infoResultMap">
+      SELECT oi.*,oii.order_item_id, oii.amount, oii.price,
+      oii.sku_id, oii.user_select_property, si.seller_name,
+      pc.product_class_name
+      from order_info oi INNER JOIN order_item_info oii on oi.order_id=oii.order_id
+      INNER JOIN seller_info si on si.seller_id=oi.seller_id
+      INNER JOIN sku_info ki on ki.sku_id=oii.sku_id
+      INNER JOIN product_class_info pc on pc.product_class_id = ki.product_class_id
+       where oi.user_id = #{user_id} and oi.order_status=1
+      ORDER BY order_time DESC
+  </select>
+    <insert id="insertOrder" parameterType="com.mall.entity.Order_info"
+            keyProperty="order_id" useGeneratedKeys="true">
+        insert into order_info(user_id, seller_id,allmoney,
+        linkman,telephone,address)
+        values (#{user_id},#{seller_id},#{allmoney},#{linkman},
+        #{telephone},#{address})
+    </insert>
+</mapper>
