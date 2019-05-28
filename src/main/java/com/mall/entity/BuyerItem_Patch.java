@@ -1,8 +1,9 @@
 package com.mall.entity;
+import java.util.ArrayList;
 import java.util.List;
 public class BuyerItem_Patch {
     //单个订单里面包含>=1个商品，这里一个卖家一个订单
-    private List<Sku_info> sku_infoList;
+    private List<Sku_info> sku_infoList=new ArrayList<Sku_info>();
     private boolean isHave = true;
     private int amount = 0;
     private boolean checked = false;
