@@ -10,5 +10,6 @@ import java.util.List;
 public interface OrderMapper {
     int insertOrder(Order_info order_info);
     List<Order_info> selOrder_info(int user_id, String queryCondition);
+    int maxid();
 
 }

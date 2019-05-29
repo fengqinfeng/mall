@@ -65,10 +65,7 @@
         <div class="cart-table-th">
             <div class="th th-chk">
                 <div class="select-all">
-                    <div class="cart-checkbox">
-                        <input class="check-all check" id="allCheckked" type="checkbox" value="false" th:onclick="'javascript:checkall('+this+');'">
-                    </div>
-                    <label>&nbsp;&nbsp;全选</label>
+
                 </div>
             </div>
             <div class="th th-item">
@@ -97,63 +94,55 @@
                 </div>
             </div>
         </div>
-        <div class="OrderList"  th:each="item, itemStat:${buyerCart.items}" th:if="${item.isHave()}">
+        <div class="OrderList"  th:each="item, itemStat:${ans.items}" th:if="${item.isHave()}">
+            <div th:each="it:${item.sku_infoList}">
             <div class="order-content" id="list-cont">
-                <div th:text="${item.sku_info.seller_name}">卖家信息 </div>
+                <div th:text="${it.seller_name}">卖家信息 </div>
                 <div class="order-content" id="list-cont">
                     <ul class="item-content layui-clear">
                         <li class="th th-chk">
                             <div class="select-all">
                                 <div class="cart-checkbox">
-                                    <input class="CheckBoxShop check" id="check" type="checkbox" num="all" name="select-all" th:value="false" th:onclick="'javascript:check1('+this+','+${item.sku_info.sku_id}+','+${item.amount}+','+${item.sku_info.price}+');'" />
-                                    <input class="hidden_sku_id" type="hidden" th:value="${item.sku_info.sku_id}">
+
+
                                 </div>
                             </div>
                         </li>
                         <li class="th th-item">
                             <div class="item-cont">
-                                <a href="javascript:;"><img th:src="@{${item.sku_info.p_image_path}}" alt=""></a>
+                                <a href="javascript:;"><img th:src="@{${it.p_image_path}}" alt=""></a>
                                 <div class="text">
-                                    <div class="title" th:text="${item.sku_info.product_class_name}"></div>
-                                    <p><span class="pro" th:text="${item.sku_info.user_select_property}"></span></p>
+                                    <div class="title" th:text="${it.product_class_name}"></div>
+                                    <p><span class="pro" th:text="${it.user_select_property}"></span></p>
                                 </div>
                             </div>
                         </li>
                         <li class="th th-price">
-                            <span class="th-su single_price" id="" th:text="${item.sku_info.price}">189.00</span>
+                            <span class="th-su single_price" id="" th:text="${it.price}">189.00</span>
                         </li>
                         <li class="th th-amount">
                             <div class="box-btn layui-clear">
-                                <div class="less layui-btn" th:onclick="'javascript:dec('+this+','+${item.sku_info.sku_id}+','+${item.amount}+');'">-</div>
+                                <div class="less layui-btn" >-</div>
 
-                                <input class="Quantity-input" id="mount" type="" name="" value="1" disabled="disabled" th:value="${item.amount}">
-                                <div class="add layui-btn up" th:onclick="'javascript:up('+this+','+${item.sku_info.sku_id}+','+${item.amount}+');'">+</div>
-                                <span style="display: none;" id="comid" th:text="${item.sku_info.sku_id}"></span>
-                                <span style="display: none;" id="price" th:text="${item.sku_info.price}"></span>
+                                <input class="Quantity-input" id="mount" type="" name="" value="1" disabled="disabled" th:value="${it.buyAmount}">
+                                <div class="add layui-btn up" >+</div>
+
                             </div>
                         </li>
                         <li class="th th-sum">
-                            <span class="sum" id="sum" th:text="${item.amount*item.sku_info.price}">189.00</span>
+                            <span class="sum" id="sum" th:text="${it.buyAmount*it.price}">189.00</span>
                         </li>
                         <li class="th th-op">
-                            <span class="dele-btn" th:onclick="'javascript:dele('+this+','+${item.sku_info.sku_id}+');'">删除</span>
+                            <span class="dele-btn" >删除</span>
                         </li>
                     </ul>
                 </div>
             </div>
+            </div>
+            <br><br>
         </div>
         <div class="FloatBarHolder layui-clear">
-            <div class="th th-chk">
-                <div class="select-all">
-                    <div class="cart-checkbox">
-                        <input class="check-all check" id="single_select" name="select-all" type="checkbox"  value="true">
-                    </div>
-                    <label>&nbsp;&nbsp;已选<span class="Selected-pieces">0</span>件</label>
-                </div>
-            </div>
-            <div class="th batch-deletion">
-                <span class="batch-dele-btn">批量删除</span>
-            </div>
+
             <div class="th Settlement">
                 <button class="layui-btn"><a class="order" href="#">结算</a></button>
             </div>

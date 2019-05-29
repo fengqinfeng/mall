@@ -4,9 +4,9 @@ import java.util.List;
 public class BuyerItem_Patch {
     //单个订单里面包含>=1个商品，这里一个卖家一个订单
     private List<Sku_info> sku_infoList=new ArrayList<Sku_info>();
-    private boolean isHave = true;
-    private int amount = 0;
-    private boolean checked = false;
+    private boolean isHave = true;//true表示订单存在
+  private int amount = 0;
+    private boolean checked = false;//false表示订单未导入到mysql
     private int seller_id;
     private String seller_name;
 

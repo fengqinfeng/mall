@@ -21,14 +21,33 @@ public class COrder_Thymeleaf {
     @Autowired OrderService orderService;
     @Autowired Address_infoService address_infoService;
     @Autowired Sku_infoService sku_infoService;
+    @RequestMapping("show_order")
+    public String showOrder(HttpServletRequest request, Model model){
+        //根据用户的id或者姓名，取得默认地址。显示在界面上。
+        int user_id = Integer.parseInt(request.getSession().getAttribute("user_id").toString());
+        String user_name = request.getSession().getAttribute("user_name").toString();
+        //获取默认地址。没有默认地址的情况先不管
+        Address_info address_info = address_infoService.selDefaultAddress(user_id);
+        //从redis购物车里面取出来选中的商品，显示在界面上
+        RedisUtil redisUtil = (RedisUtil) SpringUtil.applicationContext.getBean("redisUtil");//从spring容器里面得到一个对象
+        String dd=redisUtil.get(user_name + "_check_item");
+        //如果这个用户没有订单信息
+        //System.out.println(dd);
+        if(dd==null){
+
+        }
+        BuyerCart_Patch ans=JSON.parseObject(dd, new TypeReference<BuyerCart_Patch>() {});
+        model.addAttribute("ans", ans);
+        return "order2";
+    }
+
     @RequestMapping("add_order")
     public String confirm_Order(HttpServletRequest request, Model model) {
         //根据用户的id或者姓名，取得默认地址。显示在界面上。
         int user_id = Integer.parseInt(request.getSession().getAttribute("user_id").toString());
         String user_name = request.getSession().getAttribute("user_name").toString();
         //获取默认地址。没有默认地址的情况先不管
-        Address_info address_info = address_infoService.
-                selDefaultAddress(user_id);
+        Address_info address_info = address_infoService.selDefaultAddress(user_id);
         //从redis购物车里面取出来选中的商品，显示在界面上
         RedisUtil redisUtil = (RedisUtil) SpringUtil.applicationContext.getBean("redisUtil");//从spring容器里面得到一个对象
         String buyerCartValue = redisUtil.get(user_name);
@@ -37,7 +56,7 @@ public class COrder_Thymeleaf {
         //如果这个用户没有订单信息
         //System.out.println(dd);
         if(dd==null){
-            System.out.println("y");
+            //System.out.println("y");
             BuyerCart_Patch buyercartpatch=new BuyerCart_Patch();
             String fromObject = JSON.toJSONString(buyercartpatch);
             redisUtil.set(user_name + "_check_item", fromObject.toString());
@@ -57,20 +76,7 @@ public class COrder_Thymeleaf {
                 pan[buyerCart.getItems().get(i).getSku_info().getSeller_id()]=1;
                 //System.out.println(buyerCart.getItems().get(i).getSku_info().getSku_id());
             }
-            //卖家信息
-            //BuyerItem_Patch item = buyerCart.getItems().get(i);
-//            if(buyerCart.getItems().get(i).isChecked()==true&&pan[buyerCart.getItems().get(i).getSku_info().getSku_id()]==1){
-//                if(isCheckedItem.getSeller_id()==-1){
-//                    isCheckedItem.setSeller_id(buyerCart.getItems().get(i).getSku_info().getSeller_id());
-//                    isCheckedItem.setSeller_name(buyerCart.getItems().get(i).getSku_info().getSeller_name());
-//                    System.out.println(buyerCart.getItems().get(i).getSku_info().getProduct_class_name());
-//                    buyerCart.getItems().get(i).setChecked(false);//已经放入订单后，改为未选中
-//                    buyerCart.getItems().get(i).setHave(false);//已经放入订单，就从购物车删除
-//                }
-//                //System.out.println(buyerCart.getItems().get(i).getSku_info().getSeller_name());
-//                Sku_info temp=buyerCart.getItems().get(i).getSku_info();
-//                te.add(temp);
-//            }
+
         }
         for(int i=0;i<pan.length;i++){
             if(pan[i]==1){
@@ -85,7 +91,9 @@ public class COrder_Thymeleaf {
                         isCheckedItem.setSeller_name(buyerCart.getItems().get(j).getSku_info().getSeller_name());
                         buyerCart.getItems().get(j).setChecked(false);
                         buyerCart.getItems().get(j).setHave(false);
+
                         Sku_info inn=buyerCart.getItems().get(j).getSku_info();
+                        inn.setBuyAmount(buyerCart.getItems().get(j).getAmount());
                         isCheckedItem.addSku_info(inn);
                         //System.out.println(isCheckedItem.getSku_infoList().get(0).getProduct_class_name());
                         //System.out.println(buyerCart.getItems().get(j).getSku_info().getProduct_class_name());
@@ -104,6 +112,8 @@ public class COrder_Thymeleaf {
                 ans.addItem(item_patchList.get(i));
             }
         }
+        orderService.InsertOrder_Patch(item_patchList,user_id,address_info);
+
         //BuyerCart_Patch checkedBuyerCart = new BuyerCart_Patch();
         //checkedBuyerCart.addItem();
 
