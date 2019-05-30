@@ -7,6 +7,24 @@ public class Order_item_info {
     private double price;
     private int amount;
     private String user_select_property;
+    private String product_class_name;
+    private String p_image_path;
+
+    public String getP_image_path() {
+        return p_image_path;
+    }
+
+    public void setP_image_path(String p_image_path) {
+        this.p_image_path = p_image_path;
+    }
+
+    public String getProduct_class_name() {
+        return product_class_name;
+    }
+
+    public void setProduct_class_name(String product_class_name) {
+        this.product_class_name = product_class_name;
+    }
 
     public int getOrder_item_id() {
         return order_item_id;

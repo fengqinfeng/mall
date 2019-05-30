@@ -321,17 +321,19 @@ i{font-style: normal;}
 .shopcart-content  .CheckBoxShop{width: 16px; height: 16px; border:1px solid #cccccc; position: relative; top: 4px;}
 .shopcart-content .th-item{width: 340px; text-align: left; padding-left: 90px; box-sizing: border-box;}
 
-.shopcart-content .th-price{width: 200px; }
+.shopcart-content .th-price{width: 55px; }
 .shopcart-content .th-amount{width: 200px; }
-.shopcart-content .th-sum{width: 200px;}
-.shopcart-content .th-op{width: 100px;}
+.shopcart-content .th-sum{width:200px;}
+.shopcart-content .th-op{width: 200px;}
+.shopcart-content .th-status{width: 100px;}
+.shopcart-content .th-sop{width: 100px;}
 .shopcart-content .item-content{border:1px solid #ececee; border-bottom: 0; height: 218px; padding:59px 0; box-sizing: border-box; position: relative;}
 .shopcart-content .order-content .th-chk{margin-top: 35px; position: relative; z-index: 2;}
 .shopcart-content .order-content .th-item{position: relative; left: -120px; z-index: 1;}
 .shopcart-content .order-content .th-amount div.layui-btn,.shopcart-content .order-content .th-amount input{float: left; border:1px solid #e2e2e2; text-align: center; background: #ffffff; margin-left: -1px; color: #999999;}
 .shopcart-content .order-content .th-amount div.layui-btn{width: 28px; height: 38px; padding:0;}
 .shopcart-content .order-content .th-amount input{width: 46px; height: 36px;}
-.shopcart-content .order-content .th-amount .box-btn{padding-left: 52px;}
+.shopcart-content .order-content .th-amount .box-btn{padding-left: 0px;}
 .shopcart-content .order-content .th-sum span{line-height: 24px; color: #ee0000; font-weight: bold; }
 .shopcart-content .order-content .th-op span{display: block; cursor: pointer; line-height: 24px;}
 .shopcart-content .order-content .th-item .item-cont img{float: left; width: 98px; height: 98px;  border:1px solid #ececee; margin-right: 20px;}
@@ -347,3 +349,15 @@ i{font-style: normal;}
 .shopcart-content .FloatBarHolder .total span{color: #ee0000; font-size: 26px; font-weight: bold; padding-left: 5px;}
 .shopcart-content .FloatBarHolder .th-chk .select-all label{letter-spacing: 4px;}
 /*end-shopcart-content*/
+
+
+.price{float: left;left: -108px;position: relative;margin-top: 16px;}
+.amount{float: left;left: -112px;position: relative;margin-top: 16px;}
+.tou{width: 1198px;height: 44px;background: #ececec;margin-top: 13px;}
+.ddnumber{position: relative;top: 12px;left: 10px;}
+.lianxi{position: relative;top: -23px;left: 401px;width: 100px;}
+.dianpu{position: relative;left: 246px;top: -5px;width: 50px;}
+.op{position: relative;left: -49px;top: 20px;}
+.sum{position: relative;left: 13px;top: 11px;}
+.status{position: relative;left: 29px;top: 26px;}
+.sop{position: relative;left: 29px;top: 26px;}

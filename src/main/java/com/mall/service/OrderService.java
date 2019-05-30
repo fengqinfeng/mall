@@ -24,7 +24,9 @@ public class OrderService {
     @Autowired Sku_infoMapper sku_infoMapper;
 
 
-
+    public List<Order_info> showorderbysql(int user_id){
+        return orderMapper.selOrder_info(user_id);
+    }
 
 
     public int maxid(){
@@ -33,6 +35,8 @@ public class OrderService {
 //    public List<Order_info> showOrder(int user_id, String queryCondition){
 //        return orderMapper.showOrder(user_id, queryCondition);
 //    }
+
+    //生成订单
     @Transactional(propagation = Propagation.REQUIRED,
             isolation = Isolation.DEFAULT, readOnly = false)
     public int InsertOrder_Patch(List<BuyerItem_Patch>

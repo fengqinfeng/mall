@@ -9,6 +9,7 @@ public class Order_info {
     private int order_id;
     private String order_time;
     private int seller_id;
+    private String seller_name;
     private int user_id;
     private double allmoney;
     private int order_status;
@@ -20,6 +21,14 @@ public class Order_info {
     private String end_date;
     private String user_say;
     private String user_evaluation;
+
+    public String getSeller_name() {
+        return seller_name;
+    }
+
+    public void setSeller_name(String seller_name) {
+        this.seller_name = seller_name;
+    }
 
     public List<Order_item_info> getOrder_item_infoList() {
         return order_item_infoList;

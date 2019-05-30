@@ -21,6 +21,17 @@ public class COrder_Thymeleaf {
     @Autowired OrderService orderService;
     @Autowired Address_infoService address_infoService;
     @Autowired Sku_infoService sku_infoService;
+    @RequestMapping("show_order2")
+    public String showOrder2(HttpServletRequest request, Model model){
+        //根据用户的id或者姓名，取得默认地址。显示在界面上。
+        int user_id = Integer.parseInt(request.getSession().getAttribute("user_id").toString());
+        String user_name = request.getSession().getAttribute("user_name").toString();
+        List<Order_info> ans=orderService.showorderbysql(user_id);
+        model.addAttribute("ans", ans);
+        return "order2";
+    }
+
+
     @RequestMapping("show_order")
     public String showOrder(HttpServletRequest request, Model model){
         //根据用户的id或者姓名，取得默认地址。显示在界面上。
@@ -125,8 +136,10 @@ public class COrder_Thymeleaf {
 
         model.addAttribute("default_address", address_info);
         model.addAttribute("itemList", item_patchList);
+        List<Order_info> order=orderService.showorderbysql(user_id);
+        model.addAttribute("ans", order);
         //model.addAttribute("cart", checkedBuyerCart);
-        return "shopcart_test";
+        return "order2";
     }
 
     @RequestMapping("buyerCart_order")

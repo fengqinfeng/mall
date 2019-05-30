@@ -5,6 +5,7 @@
     <title>Title</title>
     <link rel="stylesheet" type="text/css" href="../res/static/css/main.css">
     <link rel="stylesheet" type="text/css" href="../res/layui/css/layui.css">
+    <link rel="stylesheet" href="../res/static/css/order.css">
     <script type="text/javascript" src="../res/layui/layui.js"></script>
     <script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -61,95 +62,109 @@
         <h3>夏季清仓</h3>
         <p>宝宝被子、宝宝衣服3折起</p>
     </div>
-    <div class="cart w1200">
-        <div class="cart-table-th">
-            <div class="th th-chk">
-                <div class="select-all">
+    <ul class="layui-nav layui-nav-tree " lay-filter="test">
+        <!-- 侧边导航: <ul class="layui-nav layui-nav-tree layui-nav-side"> -->
+        <li class="layui-nav-item">
+            <a href="javascript:;">默认展开</a>
+            <dl class="layui-nav-child">
+                <dd><a href="javascript:;">选项1</a></dd>
+                <dd><a href="javascript:;">选项2</a></dd>
+                <dd><a href="">跳转</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item">
+            <a href="javascript:;">解决方案</a>
+            <dl class="layui-nav-child">
+                <dd><a href="">移动模块</a></dd>
+                <dd><a href="">后台模版</a></dd>
+                <dd><a href="">电商平台</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item"><a href="">产品</a></li>
+        <li class="layui-nav-item"><a href="">大数据</a></li>
+    </ul>
+    <table class="layui-table biao" style="margin-top:-180px;">
+        <colgroup>
+            <col width="150">
+            <col width="200">
+            <col>
+        </colgroup>
+        <thead>
+        <tr>
+            <th style="width:30%;">宝贝</th>
+            <th style="width: 20%;">单价</th>
+            <th style="width: 10%;">数量</th>
+            <th style="width: 10%;">商品操作</th>
+            <th style="width: 10%;">实付款</th>
+            <th style="width: 10%;">交易状态</th>
+            <th style="text-align: center">交易操作</th>
+        </tr>
+        </thead>
 
+
+    </table>
+    <br>
+    <div th:each="item, itemStat:${ans}" th:if="${item.order_status}">
+    <table class="layui-table biao">
+        <colgroup>
+            <col width="150">
+            <col width="200">
+            <col>
+        </colgroup>
+        <thead >
+        <tr>
+            <th style="width:30%;" >订单号：<span th:text="${item.order_number}">98897382667</span></th>
+            <th th:text="${item.seller_name}" style="width: 20%;"></th>
+            <th><a href="">和我联系</a></th>
+            <th style="width: 10%;"></th>
+            <th style="width: 10%;"></th>
+            <th style="width: 10%;"></th>
+            <th style="float: right;">删除订单</th>
+        </tr>
+        </thead>
+        <div th:each="it:${item.order_item_infoList}">
+        <tbody>
+        <tr>
+            <td style="width: 30%;">
+
+                <a href="javascript:;"><img th:src="@{${it.p_image_path}}" alt=""></a>
+                <div class="text" style="position: relative;left:112px;top: -96px;width: 146px;">
+                    <div class="title" th:text="${it.product_class_name}"></div>
+                    <p><span class="pro" th:text="${it.user_select_property}"></span>
+                    </p>
                 </div>
-            </div>
-            <div class="th th-item">
-                <div class="th-inner">
-                    商品
-                </div>
-            </div>
-            <div class="th th-price">
-                <div class="th-inner">
-                    单价
-                </div>
-            </div>
-            <div class="th th-amount">
-                <div class="th-inner">
-                    数量
-                </div>
-            </div>
-            <div class="th th-sum">
-                <div class="th-inner">
-                    小计
-                </div>
-            </div>
-            <div class="th th-op">
-                <div class="th-inner">
-                    操作
-                </div>
-            </div>
+
+            </td>
+            <td style="width: 20%;" th:text="${it.price}">199.0</td>
+            <td style="width: 10%;" th:text="${it.amount}">1</td>
+            <td style="width: 10%;">
+                <p>
+                    <a href="">退货</a>
+                </p>
+                <p>
+                    <a href="">投诉</a>
+                </p>
+            </td>
+            <td style="width: 10%;"  th:text="${item.allmoney}" >
+
+            </td>
+            <td style="width: 10%;">
+                <p>
+                    <a href="">交易关闭</a>
+                </p>
+                <p>
+                    <a href="" >订单详情</a>
+                </p>
+            </td>
+            <td style="text-align: center">
+                <p>
+                    <a href="">评论</a>
+                </p>
+            </td>
+        </tr>
+        </tbody>
         </div>
-        <div class="OrderList"  th:each="item, itemStat:${ans.items}" th:if="${item.isHave()}">
-            <div th:each="it:${item.sku_infoList}">
-            <div class="order-content" id="list-cont">
-                <div th:text="${it.seller_name}">卖家信息 </div>
-                <div class="order-content" id="list-cont">
-                    <ul class="item-content layui-clear">
-                        <li class="th th-chk">
-                            <div class="select-all">
-                                <div class="cart-checkbox">
-
-
-                                </div>
-                            </div>
-                        </li>
-                        <li class="th th-item">
-                            <div class="item-cont">
-                                <a href="javascript:;"><img th:src="@{${it.p_image_path}}" alt=""></a>
-                                <div class="text">
-                                    <div class="title" th:text="${it.product_class_name}"></div>
-                                    <p><span class="pro" th:text="${it.user_select_property}"></span></p>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="th th-price">
-                            <span class="th-su single_price" id="" th:text="${it.price}">189.00</span>
-                        </li>
-                        <li class="th th-amount">
-                            <div class="box-btn layui-clear">
-                                <div class="less layui-btn" >-</div>
-
-                                <input class="Quantity-input" id="mount" type="" name="" value="1" disabled="disabled" th:value="${it.buyAmount}">
-                                <div class="add layui-btn up" >+</div>
-
-                            </div>
-                        </li>
-                        <li class="th th-sum">
-                            <span class="sum" id="sum" th:text="${it.buyAmount*it.price}">189.00</span>
-                        </li>
-                        <li class="th th-op">
-                            <span class="dele-btn" >删除</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            </div>
-            <br><br>
-        </div>
-        <div class="FloatBarHolder layui-clear">
-
-            <div class="th Settlement">
-                <button class="layui-btn"><a class="order" href="#">结算</a></button>
-            </div>
-            <div class="th total">
-                <p>应付：<span class="pieces-total">0</span></p>
-            </div>
-        </div>
+    </table>
     </div>
 </div>
 
