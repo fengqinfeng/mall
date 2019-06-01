@@ -2,6 +2,8 @@ package com.mall.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.mall.entity.*;
 import com.mall.service.*;
 import com.mall.util.RedisUtil;
@@ -11,10 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class COrder_Thymeleaf {
@@ -22,12 +26,18 @@ public class COrder_Thymeleaf {
     @Autowired Address_infoService address_infoService;
     @Autowired Sku_infoService sku_infoService;
     @RequestMapping("show_order2")
-    public String showOrder2(HttpServletRequest request, Model model){
+    public String showOrder2(HttpServletRequest request, Model model, @RequestParam(required = false,defaultValue = "1",value = "pn")Integer pn,
+                             Map<String,Object> map){
         //根据用户的id或者姓名，取得默认地址。显示在界面上。
         int user_id = Integer.parseInt(request.getSession().getAttribute("user_id").toString());
         String user_name = request.getSession().getAttribute("user_name").toString();
+
+        PageHelper.startPage(pn,10);
         List<Order_info> ans=orderService.showorderbysql(user_id);
+        PageInfo pageInfo = new PageInfo<>(ans,5);
+        System.out.println(pageInfo);
         model.addAttribute("ans", ans);
+        map.put("pageInfo",pageInfo);
         return "order2";
     }
 
