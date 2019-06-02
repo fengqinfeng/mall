@@ -1,0 +1,160 @@
+﻿.empty-star{
+    overflow: hidden; width: 19px; height: 19px; 
+    background-image: url(img/empty_star.png);
+    display: inline-block;
+    line-height: inherit;
+    vertical-align: top;
+    margin-top: 2px;
+}
+
+.full-star {
+    overflow: hidden; width: 19px; height: 19px;
+    background-image: url(img/full_star.png);
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 2px;
+}
+
+.rating-input {
+    height: 25px;
+}
+.rating-caption {
+    margin-left: 10px;
+    line-height: 25px;
+    width: 50px;
+    display: inline-block;
+    color: #EB6425;
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.star_margin {
+    clear: both;
+    margin-top: 5px;
+}
+.star_half_m {
+    height: 19px;
+    width: 110px;
+    background-position: -90px -26px;
+}
+.star_1half_m {
+    width: 110px;
+    height: 19px;
+    background-position: -68px -26px;
+}
+.star_2half_m {
+    width: 110px;
+    height: 19px;
+    background-position: -46px -26px;
+}
+.star_3half_m {
+    width: 110px;
+    height: 19px;
+    background-position: -24px -26px;
+}
+.star_4half_m {
+    width: 110px;
+    height: 19px;
+    background-position: -2px -26px;
+}
+.star_0_m {
+    width: 110px;
+    height: 19px;
+    background-position: -112px -4px;
+}
+.star_1_m {
+    height: 19px;
+    width: 110px;
+    background-position: -90px -4px;
+}
+.star_2_m {
+    width: 110px;
+    height: 19px;
+    background-position: -68px -4px;
+}
+.star_3_m {
+    width: 110px;
+    height: 19px;
+    background-position: -46px -4px;
+}
+.star_4_m {
+    width: 110px;
+    height: 19px;
+    background-position: -24px -4px;
+}
+.star_5_m {
+    width: 110px;
+    height: 19px;
+    background-position: -2px -4px;
+}
+.star_0_s {
+    width: 75px;
+    height: 13px;
+    overflow: hidden;
+    background-position: -77px -52px;
+}
+.star_1_s {
+    width: 75px;
+    height: 13px;
+    overflow: hidden;
+    background-position: -64px -52px;
+}
+.star_2_s {
+    width: 75px;
+    height: 13px;
+    overflow: hidden;
+    background-position: -49px -52px;
+}
+.star_3_s {
+    width: 75px;
+    height: 13px;
+    overflow: hidden;
+    background-position: -34px -52px;
+}
+.star_4_s {
+    width: 75px;
+    height: 13px;
+    overflow: hidden;
+    background-position: -19px -52px;
+}
+.star_5_s {
+    width: 75px;
+    height: 13px;
+    overflow: hidden;
+    background-position: -4px -52px;
+}
+.star_half_s {
+    width: 75px;
+    height: 13px;
+    overflow: hidden;
+    background-position: -64px -70px;
+}
+.star_1half_s {
+    width: 75px;
+    height: 13px;
+    background-position: -49px -70px;
+}
+.star_2half_s {
+    width: 75px;
+    height: 13px;
+    overflow: hidden;
+    background-position: -34px -70px;
+}
+.star_3half_s {
+    width: 75px;
+    height: 13px;
+    overflow: hidden;
+    background-position: -19px -70px;
+}
+.star_4half_s {
+    width: 75px;
+    height: 13px;
+    overflow: hidden;
+    background-position: -4px -70px;
+}
+.star_bg {
+    background-image: url("img/rate.png");
+    background-repeat: no-repeat;
+    display: block;
+    float: left;
+}

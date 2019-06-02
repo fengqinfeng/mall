@@ -4,8 +4,9 @@ import com.mall.entity.Class_info;
 import com.mall.entity.Sku_info;
 
 import com.mall.service.Class_infoService;
+import com.mall.service.Recommend;
 import com.mall.service.Sku_infoService;
-import com.sun.org.apache.xpath.internal.operations.Mod;
+import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,8 @@ public class CSku_info_Thymeleaf {
     private  Sku_infoService sku_infoService;
     @Autowired
     private Class_infoService class_infoService;
+    @Autowired
+    private Recommend recommends;
     //根据传入的商品id获取商品的明细信息，显示
     //给show_sku_detail.html页面
     @RequestMapping("show_sku_info_detail")
@@ -27,11 +30,22 @@ public class CSku_info_Thymeleaf {
         int sku_id = Integer.parseInt(request.getParameter("sku_id"));
         //System.out.println("..........." + sku_id);
         Sku_info sku_info = sku_infoService.showSku_info_Detail(sku_id);
+        int userid=(int)request.getSession().getAttribute("user_id");
         //Sku_info skuinfo=sku_info.get(0);
         //String[] prodcut_property_values = sku_info.getProduct_property_infoList().get(0).getProperty_value().split("\\|");
         //model.addAttribute("arr_ppv", prodcut_property_values);
         model.addAttribute("sku_info", sku_info);
         //model.addAttribute("property",sku_info);
+        try {
+            List<RecommendedItem> ans=recommends.recommend(userid,sku_id);
+            for (int i=0;i<ans.size();i++){
+                System.out.println("id="+ans.get(i).getItemID()+" value="+ans.get(i).getValue());
+            }
+        }catch (Exception e){
+            System.out.println(e);
+        }
+
+
         return "details";
     }
     @RequestMapping("all_commodity")

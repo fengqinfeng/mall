@@ -54,8 +54,7 @@
         FROM sku_info s INNER JOIN product_class_info p ON
                 s.product_class_id = p.product_class_id
 				INNER JOIN brand_info b ON b.brand_id = p.brand_id
-        INNER JOIN product_image_info i on i.product_class_id=
-        p.product_class_id
+        INNER JOIN product_image_info i on i.product_class_id=p.product_class_id
 		  INNER JOIN seller_info sl on s.seller_id = sl.seller_id
 				where b.class_id = #{0} and i.p_image_main=1
 	ORDER BY ${sort}

@@ -25,6 +25,23 @@ public class COrder_Thymeleaf {
     @Autowired OrderService orderService;
     @Autowired Address_infoService address_infoService;
     @Autowired Sku_infoService sku_infoService;
+    //跳转到评价页面
+    @RequestMapping("evalu_page")
+    public String eva(HttpServletRequest request, Model model){
+        int user_id = Integer.parseInt(request.getSession().getAttribute("user_id").toString());
+        String user_name = request.getSession().getAttribute("user_name").toString();
+        int itemid=Integer.parseInt(request.getParameter("itemid").toString());
+        int skuid=Integer.parseInt(request.getParameter("skuid").toString());
+        Sku_info sku=sku_infoService.getSingleSku_info(skuid);
+        Order_item_info orderitem=orderService.orderiteminfo(itemid);
+        model.addAttribute("sku",sku);
+        model.addAttribute("orderitem",orderitem);
+
+        return "commend";
+    }
+
+
+
     @RequestMapping("show_order2")
     public String showOrder2(HttpServletRequest request, Model model, @RequestParam(required = false,defaultValue = "1",value = "pn")Integer pn,
                              Map<String,Object> map){

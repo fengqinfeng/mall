@@ -89,7 +89,7 @@
               <div th:each="item, itemStat:${sku_infoList}" class="item">
                 <div class="img">
                   <a th:href="'/show_sku_info_detail?sku_id='+ ${item.sku_id}">
-                    <img th:src="@{${item.p_image_path}}"></a>
+                    <img th:src="@{${item.p_image_path}}" width="280px" height="280px"></a>
                 </div>
                 <div class="text">
                   <p class="title" th:text="${item.product_class_name}"></p>

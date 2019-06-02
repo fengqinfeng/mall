@@ -9,6 +9,7 @@ public class test {
     public static void main(String[] args){
         SimpleDateFormat f=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Date ans=new Date();
+        System.out.println(ans);
         System.out.println(f.format(ans));
         System.out.println(GetTime.getGuid());
     }

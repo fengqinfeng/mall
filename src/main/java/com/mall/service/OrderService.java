@@ -23,9 +23,15 @@ public class OrderService {
     @Autowired Order_itemMapper order_itemMapper;
     @Autowired Sku_infoMapper sku_infoMapper;
 
-
+    public Order_item_info orderiteminfo(int itemid){
+        return order_itemMapper.selectitem(itemid);
+    }
     public List<Order_info> showorderbysql(int user_id){
         return orderMapper.selOrder_info(user_id);
+    }
+
+    public int itemupdate(int itemid){
+        return order_itemMapper.updateeva(itemid);
     }
 
 
@@ -55,7 +61,7 @@ public class OrderService {
             order_info.setAddress(address_info.getAddress());
             order_info.setLinkman(address_info.getLinkman());
             order_info.setTelephone(address_info.getTelephone());
-
+            order_info.setUser_evaluation("0");
             //随机生成20位订单号
             order_info.setOrder_number(ordernumber.getGuid());
             int orderid=maxid();

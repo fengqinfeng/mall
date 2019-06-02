@@ -154,7 +154,7 @@
             </colgroup>
             <thead>
             <tr>
-                <th style="width:30%;">订单号：<span th:text="${item.order_number}">98897382667</span></th>
+                <th style="width:30%;">订单号：<span class="ordernumber" th:text="${item.order_number}">98897382667</span></th>
                 <th th:text="${item.seller_name}" style="width: 20%;"></th>
                 <th><a href="">和我联系</a></th>
                 <th style="width: 10%;"></th>
@@ -191,15 +191,18 @@
                     </td>
                     <td style="width: 10%;" >
                         <p th:if="${itStat.index} &lt;1">
-                            <a href="">取消订单</a>
+                            <a th:onclick="'javascript:test('+this+','+${it.user_eva}+');'">取消订单</a>
                         </p>
                         <p th:if="${itStat.index} &lt;1">
                             <a href="">订单详情</a>
                         </p>
                     </td>
                     <td style="text-align: center" >
-                        <p>
-                            <a href="">评论</a>
+                        <p th:if="${it.user_eva} eq 0">
+                            <a  th:onclick="'javascript:f('+this+','+${it.sku_id}+','+${it.order_item_id}+');'" th:text="未评价" ></a>
+                        </p>
+                        <p th:if="${it.user_eva} eq 1" th:text="已评价">
+
                         </p>
                     </td>
                 </tr>
@@ -210,7 +213,7 @@
 
 </div>
 <!--显示分页信息-->
-<div class="row">
+<div class="row" style="width: 95%;">
     <!--文字信息-->
     <div class="col-md-4" style="position:relative;left:420px;">
         当前第 <span th:text="${pageInfo.pageNum}"></span>  页.总共 <span th:text="${pageInfo.pages}"></span>  页.一共 <span th:text="${pageInfo.total}"></span>  条记录
@@ -258,5 +261,18 @@
         </nav>
     </div>
 </div>
+<script th:inline="javascript">
+    function f(obj,skuid,itemid) {
+        var proper=$(obj).parent().parent().prev().prev().prev().prev().prev().prev().children().next().children().next().children(".pro").text();
+        var ordern=$(obj).parent().parent().prev().prev().prev().prev().prev().prev().parent().parent().prev().children().children().children(".ordernumber").text();
+
+        //alert(skuid+proper+" "+ordern+" "+itemid);
+        window.location.href = "evalu_page?skuid="+skuid+"&&itemid="+itemid;
+
+    }
+    function test(obj,eva) {
+        alert(eva);
+    }
+</script>
 </body>
 </html>

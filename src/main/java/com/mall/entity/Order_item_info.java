@@ -9,6 +9,15 @@ public class Order_item_info {
     private String user_select_property;
     private String product_class_name;
     private String p_image_path;
+    private int user_eva;
+
+    public int getUser_eva() {
+        return user_eva;
+    }
+
+    public void setUser_eva(int user_eva) {
+        this.user_eva = user_eva;
+    }
 
     public String getP_image_path() {
         return p_image_path;

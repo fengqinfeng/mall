@@ -10,4 +10,6 @@ import java.util.List;
 public interface Order_itemMapper {
     int insertOrderItem(Order_item_info order_item_info);
     List<Order_info> selOrder_info(int user_id);
+    public int updateeva(int order_item_id);
+    public Order_item_info selectitem(int order_item_id);
 }

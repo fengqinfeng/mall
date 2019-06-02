@@ -26,6 +26,7 @@
             <result property="amount" column="amount"/>
             <result property="p_image_path" column="p_image_path"/>
             <result property="product_class_name" column="product_class_name"/>
+            <result property="user_eva" column="user_eva"/>
             <result property="user_select_property" column="user_select_property"/>
         </collection>
     </resultMap>
@@ -34,7 +35,7 @@
     <select id="selOrder_info" parameterType="int" resultMap="com.mall.mapper.OrderMapper.Order_infoResultMap">
       SELECT oi.*,oii.order_item_id, oii.amount, oii.price,
       oii.sku_id, oii.user_select_property, si.seller_name,
-      pc.product_class_name,im.p_image_path
+      pc.product_class_name,im.p_image_path,oii.user_eva
       from order_info oi INNER JOIN order_item_info oii on oi.order_id=oii.order_id
       INNER JOIN seller_info si on si.seller_id=oi.seller_id
       INNER JOIN sku_info ki on ki.sku_id=oii.sku_id
@@ -43,6 +44,7 @@
        where oi.user_id = #{user_id} and oi.order_status=1
       ORDER BY order_time DESC
   </select>
+
     <select id="maxid" resultType="java.lang.Integer">
       select max(order_id) from order_info;
     </select>
