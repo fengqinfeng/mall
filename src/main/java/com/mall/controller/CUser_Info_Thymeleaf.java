@@ -23,6 +23,13 @@ public class CUser_Info_Thymeleaf {
     public String showLogin(){
         return "login";
     }
+    @RequestMapping("logout")
+    public String loginout(Model model, HttpServletRequest request){
+        request.getSession().removeAttribute("user_name");
+        request.getSession().removeAttribute("user_id");
+        //System.out.println(request.getSession().getAttribute("user_name"));
+        return "redirect:login";
+    }
     @RequestMapping("index")//返回主页面
     public String showIndex(Model model, HttpServletRequest request){
         //index页面分成登录和没登录2种情况。没登录商品存cookie，登录存redis。

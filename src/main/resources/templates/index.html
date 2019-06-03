@@ -18,7 +18,10 @@
         <a href="/show_cart"></a>
       </p>
       <div class="sn-quick-menu">
-        <div class="login"><a href="login.html">登录</a></div>
+
+        <div class="login" th:if="${session.user_name}== null"><a href="/login">登录</a></div>
+        <div class="login" th:if="${session.user_name}!= null"><a  th:text="${session.user_name}">登录</a></div>
+        <div class="login" th:if="${session.user_name}!= null"><a th:href="@{logout}" >注销</a></div>
         <div class="sp-cart"><a href="import_buyerCart">购物车</a><span>2</span></div>
       </div>
     </div>
@@ -52,7 +55,7 @@
       <div class="inner-cont0">
         <div class="inner-cont1 w1200">
           <div class="inner-cont2">
-            <a href="/qry_sku_info?class_id=0401&start=0&pageSize=15&sortField=sale_number&sortMode=desc" class="active">所有商品</a>
+            <a href="/qry_sku_info?class_id=0401&sortField=sale_number&sortMode=desc" class="active">所有商品</a>
             <a href="buytoday.html">今日团购</a>
             <a href="information.html">母婴资讯</a>
             <a href="about.html">关于我们</a>

@@ -5,7 +5,10 @@
   <title>Document</title>
   <link rel="stylesheet" type="text/css" href="res/static/css/main.css">
   <link rel="stylesheet" type="text/css" href="res/layui/css/layui.css">
+  <script type="text/javascript" src="../res/static/jquery-3.3.1.min.js"></script>
   <script type="text/javascript" src="res/layui/layui.js"></script>
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
+  <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
 </head>
@@ -19,7 +22,8 @@
       </p>
       <div class="sn-quick-menu">
         <div class="login" th:if="${session.user_name}== null"><a href="/login">登录</a></div>
-        <div class="login" th:if="${session.user_name}!= null"><a href="#" th:text="${session.user_name}">登录</a></div>
+        <div class="login" th:if="${session.user_name}!= null"><a  th:text="${session.user_name}">登录</a></div>
+        <div class="login" th:if="${session.user_name}!= null"><a th:href="@{logout}" >注销</a></div>
         <div class="sp-cart"><a href="shopcart.html">购物车</a><span>2</span></div>
       </div>
     </div>
@@ -75,7 +79,7 @@
           </div>
         </div>
         <div class="right-cont-wrap">
-          <div class="right-cont">
+          <div class="right-cont" style="width: 97%;">
             <div class="sort layui-clear">
               <a class="active" href="javascript:;" event = 'volume'>销量</a>
               <a href="javascript:;" event = 'price'>价格</a>
@@ -85,8 +89,8 @@
             <div class="prod-number">
               <span>200个</span>
             </div>
-            <div  class="cont-list layui-clear" id="list-cont">
-              <div th:each="item, itemStat:${sku_infoList}" class="item">
+            <div  class="cont-list layui-clear" id="list-cont" >
+              <div th:each="item, itemStat:${sku_infoList}" class="item" style="margin: 0 23px 60px 0;">
                 <div class="img">
                   <a th:href="'/show_sku_info_detail?sku_id='+ ${item.sku_id}">
                     <img th:src="@{${item.p_image_path}}" width="280px" height="280px"></a>
@@ -101,6 +105,55 @@
                 </div>
               </div>
 
+            </div>
+            <!--显示分页信息-->
+            <div class="row" style="width: 95%;">
+              <!--文字信息-->
+              <div class="col-md-4" style="position:relative;left:260px;">
+                当前第 <span th:text="${pageInfo.pageNum}"></span>  页.总共 <span th:text="${pageInfo.pages}"></span>  页.一共 <span th:text="${pageInfo.total}"></span>  条记录
+              </div>
+              <!--点击分页-->
+              <div class="col-md-6">
+                <nav aria-label="Page navigation">
+                  <ul class="pagination">
+
+                    <li ><a th:href="@{qry_sku_info(pn=1,class_id='0401',sortField=sale_number,sortMode=desc)}">首页</a></li>
+
+                    <!--上一页-->
+                    <li >
+                      <!--<div >-->
+                      <a th:if="${pageInfo.hasPreviousPage}" th:href="@{qry_sku_info(pn=${pageInfo.pageNum}-1,class_id='0401',sortField=sale_number,sortMode=desc)}"
+                         aria-label="Previous">
+                        <span aria-hidden="true">«</span>
+                      </a>
+                      <!--</div>-->
+                    </li>
+
+                    <!--循环遍历连续显示的页面，若是当前页就高亮显示，并且没有链接-->
+                    <!--<div class="" th:each="page_num:${pageInfo.navigatepageNums}" style="position:relative;float: left;">-->
+                    <li  th:each="page_num:${pageInfo.navigatepageNums}"  th:class="${page_num }==${pageInfo.pageNum}? 'active'" >
+                      <a th:if="${page_num }==${pageInfo.pageNum}" th:text="${page_num}" th:href="@{qry_sku_info(pn=${page_num},class_id='0401',sortField=sale_number,sortMode=desc)}"></a>
+                      <a th:if="${page_num}!=${pageInfo.pageNum}" th:text="${page_num}" th:href="@{qry_sku_info(pn=${page_num},class_id='0401',sortField=sale_number,sortMode=desc)}"></a>
+                    </li>
+                    <!--<li th:if="${page_num}!=${pageInfo.pageNum}">-->
+                    <!--<a th:text="${page_num}" th:href="@{show_order2(pn=${page_num})}"></a>-->
+                    <!--</li>-->
+                    <!--</div>-->
+
+                    <!--下一页-->
+                    <li >
+                      <!--<div >-->
+                      <a th:if="${pageInfo.hasNextPage}" th:href="@{qry_sku_info(pn=${pageInfo.pageNum}+1,class_id='0401',sortField=sale_number,sortMode=desc)}"
+                         aria-label="Next">
+                        <span aria-hidden="true">»</span>
+                      </a>
+                      <!--</div>-->
+                    </li>
+
+                    <li ><a th:href="@{qry_sku_info(pn=${pageInfo.pages},class_id='0401',sortField=sale_number,sortMode=desc)}">尾页</a></li>
+                  </ul>
+                </nav>
+              </div>
             </div>
             <!-- 模版引擎导入 -->
             <!-- <script type="text/html" id="demo">
@@ -119,12 +172,13 @@
                 </div>
               {{# }); }}
             </script> -->
-            <div id="demo0" style="text-align: center;"></div>
+            <!--<div id="demo0" style="text-align: center;"></div>-->
           </div>
         </div>
       </div>
     </div>
   </div>
+
 <script>
 
   layui.config({

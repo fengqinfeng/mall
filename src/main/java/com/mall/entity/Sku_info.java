@@ -16,6 +16,15 @@ public class Sku_info {
     //淘宝店应该是n vs m的关系，需要在加上一张中间表来处理。这里简化处理了。
     private int seller_id;
     private String seller_name;
+    private String class_id;
+
+    public String getClass_id() {
+        return class_id;
+    }
+
+    public void setClass_id(String class_id) {
+        this.class_id = class_id;
+    }
 
     public void incrementAmount(int buyAmount){
         this.buyAmount += buyAmount;

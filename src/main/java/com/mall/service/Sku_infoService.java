@@ -19,10 +19,8 @@ public class Sku_infoService {
     }
 
     public List<Sku_info> qry_Sku_info(String class_id,
-                                       String sort,
-                                        int start,
-                                       int pageSize){
+                                       String sort){
         return sku_infoMapper.qry_Sku_info
-                (class_id, sort, start, pageSize);
+                (class_id, sort);
     }
 }

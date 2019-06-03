@@ -30,6 +30,7 @@
         <result column="seller_name" jdbcType="VARCHAR" property="seller_name" />
         <result column="user_select_property" jdbcType="VARCHAR" property="user_select_property" />
         <result column="price" jdbcType="VARCHAR" property="price" />
+        <result column="class_id" jdbcType="VARCHAR" property="class_id" />
     </resultMap>
     <select id="showSku_info_Detail" parameterType="int" resultMap="Sku_infoResultMap">
         SELECT k.sku_id, k.product_class_id, k.price, k.amount,k.seller_id, s.seller_name, p.product_class_name, i.p_image_path,
@@ -58,7 +59,7 @@
 		  INNER JOIN seller_info sl on s.seller_id = sl.seller_id
 				where b.class_id = #{0} and i.p_image_main=1
 	ORDER BY ${sort}
-	LIMIT #{2}, #{3}
+
   </select>
     <select id="selSale_Number" resultType="int">
         select sale_Number from sku_info where
