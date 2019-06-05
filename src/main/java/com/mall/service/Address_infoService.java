@@ -13,6 +13,13 @@ import java.util.List;
 public class Address_infoService {
     @Autowired
     private Address_infoMapper address_infoMapper;
+
+    public Address_info selectoneaddress(int user_id,String address){
+        return address_infoMapper.selOneAddress(user_id,address);
+    }
+
+
+
     //事务的例子
     //@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public int insertAddress(Address_info address_info){

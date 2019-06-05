@@ -12,8 +12,8 @@
     </resultMap>
     <insert id="insertOrderItem" parameterType="com.mall.entity.Order_item_info"
             keyProperty="order_item_id" useGeneratedKeys="true">
-        insert into order_item_info(order_id,sku_id,price,amount,user_select_property)
-        values (#{order_id},#{sku_id},#{price},#{amount},#{user_select_property})
+        insert into order_item_info(order_id,sku_id,price,amount,user_select_property,user_eva)
+        values (#{order_id},#{sku_id},#{price},#{amount},#{user_select_property},#{user_eva})
     </insert>
     <update id="updateeva" parameterType="int"
             flushCache="true">

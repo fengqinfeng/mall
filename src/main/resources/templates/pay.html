@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="../res/static/css/main.css">
+    <link rel="stylesheet" type="text/css" href="../res/layui/css/layui.css">
+    <link rel="stylesheet" href="../res/static/css/order.css">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"/>
+    <script type="text/javascript" src="../res/layui/layui.js"></script>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+</head>
+<body>
+<div class="site-nav-bg">
+    <div class="site-nav w1200">
+        <p class="sn-back-home">
+            <i class="layui-icon layui-icon-home"></i>
+            <a href="#">首页</a>
+        </p>
+        <div class="sn-quick-menu">
+            <div class="login" th:if="${session.user_name}== null"><a href="/login">登录</a></div>
+            <div class="login" th:if="${session.user_name}!= null"><a  th:text="${session.user_name}">登录</a></div>
+            <div class="login" th:if="${session.user_name}!= null"><a th:href="@{logout}" >注销</a></div>
+            <div class="sp-cart" th:if="${session.user_name}== null"><a href="show_cart">购物车</a><span>2</span></div>
+            <div class="sp-cart" th:if="${session.user_name}!= null"><a href="import_buyerCart">购物车</a><span>2</span></div>
+        </div>
+    </div>
+</div>
+<div class="header">
+    <div class="headerLayout w1200">
+        <div class="headerCon">
+            <h1 class="mallLogo">
+                <a href="#" title="母婴商城">
+                    <img src="../res/static/img/logo.png">
+                </a>
+            </h1>
+            <div class="mallSearch">
+                <form action="" class="layui-form" novalidate>
+                    <input type="text" name="title" required lay-verify="required" autocomplete="off"
+                           class="layui-input" placeholder="请输入需要的商品">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">
+                        <i class="layui-icon layui-icon-search"></i>
+                    </button>
+                    <input type="hidden" name="" value="">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="content content-nav-base shopcart-content">
+    <div class="main-nav">
+        <div class="inner-cont0">
+            <div class="inner-cont1 w1200">
+                <div class="inner-cont2">
+                    <a href="commodity.html" class="active">所有商品</a>
+                    <a href="buytoday.html">今日团购</a>
+                    <a href="information.html">母婴资讯</a>
+                    <a href="about.html">关于我们</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="banner-bg w1200">
+        <h3>夏季清仓</h3>
+        <p>宝宝被子、宝宝衣服3折起</p>
+    </div>
+</div>
+<div class="well well-lg col-lg-10 col-lg-offset-1">预付款：
+    <span class="s" th:text="${sum}">12.0</span>
+</div>
+<div class="row col-lg-10">
+    <div style="margin-left: 110px;">
+        <a href="show_order2"><button type="button" class="btn btn-primary" >稍后付款</button></a>
+    <button type="button" class="btn btn-primary">立即付款</button>
+    </div>
+</div>
+<script type="text/javascript" th:inline="javascript">
+
+</script>
+
+
+
+
+
+
+
+
+
+</body>
+</html>

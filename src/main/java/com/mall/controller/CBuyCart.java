@@ -131,7 +131,7 @@ public class CBuyCart {
      */
     @RequestMapping("show_cart")
     public String show_Cart(HttpServletRequest request, Model model){
-        BuyerCart buyerCart = null;
+        BuyerCart buyerCart = new BuyerCart();
         String user_name = null;
         String buyerCartValue = null;
         RedisUtil redisUtil = null;
@@ -141,7 +141,7 @@ public class CBuyCart {
             //利用buyerCart字符串作为键名，写死了。可以自己灵活修改。
             // 购物车的值作为键值。
             buyerCartValue = CookieUtil.getCookie(request, "buyerCart");
-            System.out.println(buyerCartValue);
+           // System.out.println(buyerCartValue);
         }
         else{//用户登录了。则去数据库或者redis里面进行获取购物车信息。
             //利用用户名作为键名，购物车的值作为键值。
@@ -162,6 +162,8 @@ public class CBuyCart {
         //System.out.println(".........." + item.getAmount());
         //System.out.println(buyerCartValue);
         //System.out.println(buyerCart.getItems().size());
+        //System.out.println(buyerCart);
+
         model.addAttribute("buyerCart", buyerCart);
         return "shopcart";
     }
@@ -177,7 +179,6 @@ public class CBuyCart {
         //该方法是为了解决未登录转登录存入redis的，所以user_name必定有值
         String user_name = request.getSession().getAttribute
                 ("user_name").toString();
-        //System.out.println(user_name);
         redisUtil = (RedisUtil) SpringUtil.applicationContext.
                 getBean("redisUtil");//从spring容器里面得到一个对象
         //分别取出cookie和redis里面存的值，反序列化成购物车
@@ -192,8 +193,8 @@ public class CBuyCart {
                             new TypeReference<BuyerCart>(){});
         //cookie不为空，才能导入到redis。
         if (buyerCartValue_Cookie != null){
-            buyerCart_Cookie = JSON.parseObject(buyerCartValue_Cookie,
-                    new TypeReference<BuyerCart>(){});
+            buyerCart_Cookie = JSON.parseObject(buyerCartValue_Cookie, new TypeReference<BuyerCart>(){});
+            System.out.print(buyerCartValue_Cookie);
             //对cookie的购物车内容进行逐项比较，
             // redis购物车如果有，就修改数量，没有就插入。
             int index = -1;
@@ -201,19 +202,33 @@ public class CBuyCart {
                 index = -1;
                 if(buyerCart_Redis.getItems() != null || buyerCart_Redis.getItems().size() > 0)
                     index = buyerCart_Redis.findItem(buyerCart_Cookie.getItems().get(i));
-                if (index >= 0) {//说明存在，则修改数量
-                    if(buyerCart_Cookie.getItems().get(i).isHave()==true&&buyerCart_Cookie.getItems().get(i).getAmount()!=0){
-                        buyerCart_Redis.getItems().get(index).incrementAmount(buyerCart_Cookie.getItems()
-                                .get(i).getAmount());
+                if (index >= 0) {//说明redis中存在，则修改数量，并在cookie里面设置商品不存在
+                    if(buyerCart_Cookie.getItems().get(i).isHave()==true&&buyerCart_Cookie.getItems().get(i).getAmount()!=0
+                    &&buyerCart_Cookie.getItems().get(i).isImpo()==false){
+                        buyerCart_Redis.getItems().get(index).incrementAmount(buyerCart_Cookie.getItems().get(i).getAmount());
+                        buyerCart_Redis.getItems().get(index).setHave(true);
+                        buyerCart_Redis.getItems().get(index).setChecked(false);
+
+                        String fromObject1 = JSON.toJSONString(buyerCart_Redis);
+                        redisUtil.set(user_name, fromObject1.toString());
+
                         buyerCart_Cookie.getItems().get(i).setHave(false);
+                        buyerCart_Cookie.getItems().get(i).setImpo(true);
                         buyerCart_Cookie.getItems().get(i).setAmount(0);
                         String fromObject = JSON.toJSONString(buyerCart_Cookie);
                         CookieUtil.writeCookie(response, "buyerCart", fromObject);
                     }
                 }
-                else {//不存在，则从cookie购物车添加到redis购物车。
-                    if(buyerCart_Cookie.getItems().get(i).isHave()==true&&buyerCart_Cookie.getItems().get(i).getAmount()!=0){
+                else {//不存在，则从cookie购物车添加到redis购物车。cookie中商品存在且数量不为0，
+                    if(buyerCart_Cookie.getItems().get(i).isHave()==true&&buyerCart_Cookie.getItems().get(i).getAmount()!=0&&
+                    buyerCart_Cookie.getItems().get(i).isImpo()==false){
+                        buyerCart_Cookie.getItems().get(i).setImpo(true);//设置为已经导入过redis
+
                         buyerCart_Redis.addItem(buyerCart_Cookie.getItems().get(i));
+
+                        String fromObject1 = JSON.toJSONString(buyerCart_Redis);
+                        redisUtil.set(user_name, fromObject1.toString());
+
                         buyerCart_Cookie.getItems().get(i).setHave(false);
                         buyerCart_Cookie.getItems().get(i).setAmount(0);
                         String fromObject = JSON.toJSONString(buyerCart_Cookie);
@@ -222,8 +237,9 @@ public class CBuyCart {
                 }
             }
         }
-        String fromObject = JSON.toJSONString(buyerCart_Redis);
-        redisUtil.set(user_name, fromObject.toString());
+        buyerCartValue_Redis = redisUtil.get(user_name);
+        buyerCart_Redis = JSON.parseObject(buyerCartValue_Redis,
+                new TypeReference<BuyerCart>(){});
         model.addAttribute("buyerCart", buyerCart_Redis);
         return "shopcart";
     }

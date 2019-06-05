@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="../res/static/css/main.css">
+    <link rel="stylesheet" type="text/css" href="../res/layui/css/layui.css">
+    <link rel="stylesheet" href="../res/static/css/order.css">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"/>
+    <script type="text/javascript" src="../res/layui/layui.js"></script>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+</head>
+<body>
+<div class="site-nav-bg">
+    <div class="site-nav w1200">
+        <p class="sn-back-home">
+            <i class="layui-icon layui-icon-home"></i>
+            <a href="#">首页</a>
+        </p>
+        <div class="sn-quick-menu">
+            <div class="login" th:if="${session.user_name}== null"><a href="/login">登录</a></div>
+            <div class="login" th:if="${session.user_name}!= null"><a  th:text="${session.user_name}">登录</a></div>
+            <div class="login" th:if="${session.user_name}!= null"><a th:href="@{logout}" >注销</a></div>
+            <div class="sp-cart" th:if="${session.user_name}== null"><a href="show_cart">购物车</a><span>2</span></div>
+            <div class="sp-cart" th:if="${session.user_name}!= null"><a href="import_buyerCart">购物车</a><span>2</span></div>
+        </div>
+    </div>
+</div>
+
+<div class="header">
+    <div class="headerLayout w1200">
+        <div class="headerCon">
+            <h1 class="mallLogo">
+                <a href="#" title="母婴商城">
+                    <img src="../res/static/img/logo.png">
+                </a>
+            </h1>
+            <div class="mallSearch">
+                <form action="" class="layui-form" novalidate>
+                    <input type="text" name="title" required lay-verify="required" autocomplete="off"
+                           class="layui-input" placeholder="请输入需要的商品">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">
+                        <i class="layui-icon layui-icon-search"></i>
+                    </button>
+                    <input type="hidden" name="" value="">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="content content-nav-base shopcart-content">
+    <div class="main-nav">
+        <div class="inner-cont0">
+            <div class="inner-cont1 w1200">
+                <div class="inner-cont2">
+                    <a href="commodity.html" class="active">所有商品</a>
+                    <a href="buytoday.html">今日团购</a>
+                    <a href="information.html">母婴资讯</a>
+                    <a href="about.html">关于我们</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="banner-bg w1200">
+        <h3>夏季清仓</h3>
+        <p>宝宝被子、宝宝衣服3折起</p>
+    </div>
+
+
+    <div>
+        <p style="margin-left: 34px;">地址</p>
+        <div class="panel panel-default" style="width: 999px;margin-left: 34px;">
+            <div class="panel-body">
+                <p class="defaultadd" th:each="add:${address}" th:text="${add.address}" th:if="${add.defaultAddress}"></p>
+            </div>
+
+        </div>
+        <p data-toggle="modal" data-target="#myModal" style="position: relative;left: 35px;"> 选择地址</p>
+    </div>
+
+
+
+
+
+    <nav class="navbar navbar-default" role="navigation"
+         style="width: 900px;position: relative;left: 35px;margin-top: 0px;">
+
+        <ul class="nav navbar-nav">
+            <li class="" style="width: 342px;"><a>宝贝</a></li>
+            <li><a style="width: 160px;">单价</a></li>
+            <li><a style="width: 200px;">数量</a></li>
+            <li><a style="width: 88px;">实付款</a></li>
+
+        </ul>
+    </nav>
+</div>
+</div>
+</nav>
+<br>
+
+<div style="position: relative;left: -264px;">
+    <table class="layui-table biao" th:each="an:${ans.items}">
+
+        <colgroup>
+            <col width="150">
+            <col width="200">
+            <col>
+        </colgroup>
+        <thead>
+        <tr>
+            <th style="width:40%;">卖家：<span class="ordernumber" th:text="${an.seller_name}">98897382667</span></th>
+            <th  style="width: 20%;"></th>
+
+            <th style="width: 20%;"></th>
+            <th style="width: 20%;"></th>
+
+
+        </tr>
+        </thead>
+        <div >
+            <tbody th:each="a:${an.sku_infoList}">
+            <tr>
+                <td style="width: 40%;">
+                    <a href="javascript:;"><img  th:src="@{${a.p_image_path}}" alt=""></a>
+                    <div class="text" style="position: relative;left:112px;top: -96px;width: 146px;">
+                        <div class="title" th:text="${a.product_class_name}">ddddd</div>
+                        <p><span class="pro" th:text="${a.user_select_property}">ddddddddddd</span>
+                        </p>
+                    </div>
+                </td>
+                <td style="width: 20%;" th:text="${a.price}">199.0</td>
+                <td style="width:20%;" th:text="${a.buyAmount}">1</td>
+                <td style="width: 20%;" class="sum" th:text="${a.price*a.buyAmount}">1</td>
+            </tr>
+            </tbody>
+        </div>
+
+    </table>
+</div>
+<a onclick="f();"><button type="button" class="btn btn-primary" >取消</button></a>
+<button onclick="pay();" type="button" class="btn btn-primary">确认</button>
+</div>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    选择地址
+                </h4>
+            </div>
+            <div class="modal-body">
+                <p th:each="add:${address}" th:text="${add.address}" th:onclick="'javascript:select('+this+');'"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default guan" data-dismiss="modal">关闭
+                </button>
+
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<script type="text/javascript" th:inline="javascript">
+    function pay() {
+        var elements = $('.sum');
+        var ans=0;
+        elements.each(function () {
+            //alert($(this).text());
+            ans=ans+Number($(this).text());
+        });
+        //地址
+        var add=$(".defaultadd").text();
+        window.location.href="paymoney?address="+add;
+        // $.ajax({
+        //     type: "get",
+        //     url: "paymoney",
+        //     data: {
+        //         address:add
+        //     },
+        //     success: function (data) {
+        //         if(data=="ok")
+        //             window.location.href="paym?sum="+ans;
+        //     }
+        // });
+    }
+    function select(obj) {
+        //alert($(".defaultadd").text());
+        $(".defaultadd").text($(obj).text());
+        $(".guan").click();
+    }
+    function f() {
+
+        $.ajax({
+            type: "get",
+            url: "cancelcheckorder",
+            data: {
+            },
+            success: function (data) {
+                if(data=="ok")
+                    window.location.href="show_cart";
+            }
+        });
+    }
+</script>
+</body>
+</html>

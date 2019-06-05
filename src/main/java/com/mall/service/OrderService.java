@@ -61,7 +61,7 @@ public class OrderService {
             order_info.setAddress(address_info.getAddress());
             order_info.setLinkman(address_info.getLinkman());
             order_info.setTelephone(address_info.getTelephone());
-            order_info.setUser_evaluation("0");
+
             //随机生成20位订单号
             order_info.setOrder_number(ordernumber.getGuid());
             int orderid=maxid();
@@ -75,6 +75,7 @@ public class OrderService {
                 order_item_info.setPrice(sku_info.getPrice());
                 order_item_info.setAmount(sku_info.getBuyAmount());
                 order_item_info.setUser_select_property(sku_info.getUser_select_property());
+                order_item_info.setUser_eva(0);
                 order_itemMapper.insertOrderItem(order_item_info);
                 allm+=sku_info.getPrice()*sku_info.getBuyAmount();
                 //修改sku_info的sale_number
@@ -83,6 +84,8 @@ public class OrderService {
                 sku_infoMapper.updateSale_number(sale_number,sku_id);
             }
             order_info.setAllmoney(allm);
+            order_info.setUser_evaluation("0");
+            order_info.setUser_say("0");
             orderMapper.insertOrder(order_info);
         }
         //删除购物车添加到订单的商品

@@ -56,8 +56,10 @@ public class Sku_info {
     //用户购买商品时选择的组合属性,合并后用|分割，不能从数据库中读取。
     // 写到一个字段里面，如：绿色|XXL这样的格式
     private String user_select_property;
+    //private String property_name;
     private double price;
     private List<Product_property_info> product_property_infoList;
+
 
     public Sku_info() {
     }

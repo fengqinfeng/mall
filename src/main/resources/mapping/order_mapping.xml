@@ -51,8 +51,8 @@
     <insert id="insertOrder" parameterType="com.mall.entity.Order_info"
             keyProperty="order_id" useGeneratedKeys="true">
         insert into order_info(user_id, seller_id,allmoney,
-        linkman,telephone,address,order_time,order_number,order_status)
+        linkman,telephone,address,order_time,order_number,order_status,user_say,user_evaluation)
         values (#{user_id},#{seller_id},#{allmoney},#{linkman},
-        #{telephone},#{address},#{order_time},#{order_number},#{order_status})
+        #{telephone},#{address},#{order_time},#{order_number},#{order_status},#{user_say},#{user_evaluation})
     </insert>
 </mapper>

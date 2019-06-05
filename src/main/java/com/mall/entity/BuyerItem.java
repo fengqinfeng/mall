@@ -12,6 +12,16 @@ public class BuyerItem {
     private boolean isHave = true;  //是否删除改商品，true表示商品存在
     private int amount = 0;
     private boolean checked = false;//登录的时候，表示加到订单时是否选中
+    private boolean impo=false;//是否导入redis
+
+    public boolean isImpo() {
+        return impo;
+    }
+
+    public void setImpo(boolean impo) {
+        this.impo = impo;
+    }
+
     public Sku_info getSku_info() {
         return sku_info;
     }

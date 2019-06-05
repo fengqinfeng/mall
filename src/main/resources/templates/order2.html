@@ -26,7 +26,8 @@
             <div class="login" th:if="${session.user_name}== null"><a href="/login">登录</a></div>
             <div class="login" th:if="${session.user_name}!= null"><a  th:text="${session.user_name}">登录</a></div>
             <div class="login" th:if="${session.user_name}!= null"><a th:href="@{logout}" >注销</a></div>
-            <div class="sp-cart"><a href="shopcart.html">购物车</a><span>2</span></div>
+            <div class="sp-cart" th:if="${session.user_name}== null"><a href="show_cart">购物车</a><span>2</span></div>
+            <div class="sp-cart" th:if="${session.user_name}!= null"><a href="import_buyerCart">购物车</a><span>2</span></div>
         </div>
     </div>
 </div>
@@ -174,7 +175,6 @@
                             <p><span class="pro" th:text="${it.user_select_property}"></span>
                             </p>
                         </div>
-
                     </td>
                     <td style="width: 20%;" th:text="${it.price}">199.0</td>
                     <td style="width: 10%;" th:text="${it.amount}">1</td>
@@ -198,6 +198,10 @@
                         </p>
                     </td>
                     <td style="text-align: center" >
+                        <p th:if="${item.user_say eq '0' && itStat.index eq 0}">
+                            <a th:onclick="'javascript:pay('+this+','+${item.allmoney}+');'"  th:text="未付款" ></a>
+                        </p>
+                        <p th:if="${item.user_say eq '1' && itStat.index eq 0}" th:text="已付款">
                         <p th:if="${it.user_eva} eq 0">
                             <a  th:onclick="'javascript:f('+this+','+${it.sku_id}+','+${it.order_item_id}+');'" th:text="未评价" ></a>
                         </p>
@@ -262,6 +266,11 @@
     </div>
 </div>
 <script th:inline="javascript">
+
+    function pay(obj,money) {
+        window.location.href="paym?sum="+money;
+    }
+
     function f(obj,skuid,itemid) {
         var proper=$(obj).parent().parent().prev().prev().prev().prev().prev().prev().children().next().children().next().children(".pro").text();
         var ordern=$(obj).parent().parent().prev().prev().prev().prev().prev().prev().parent().parent().prev().children().children().children(".ordernumber").text();

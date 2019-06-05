@@ -39,7 +39,7 @@ public class Cart_Relevant {
                 if (buyerCart.getItems().get(i).getSku_info().getSku_id() == sku_id&&
                         buyerCart.getItems().get(i).getSku_info().getUser_select_property().equals(property)){
                     buyerCart.getItems().get(i).setChecked(true);
-                    //System.out.println(buyerCart.getItems().get(i).isChecked());
+                    System.out.println(buyerCart.getItems().get(i).isChecked());
                     break;
                 }
             }
@@ -49,6 +49,7 @@ public class Cart_Relevant {
         return 1;
     }
 
+    //取消选择商品
     @ResponseBody
     @RequestMapping("modify_buyerItem_uncheck")
     public int modifyBuyerItemUncheck(HttpServletRequest request,HttpServletResponse response){
@@ -64,7 +65,7 @@ public class Cart_Relevant {
                 if (buyerCart.getItems().get(i).getSku_info().getSku_id() == sku_id&&
                         buyerCart.getItems().get(i).getSku_info().getUser_select_property().equals(property)){
                     buyerCart.getItems().get(i).setChecked(false);
-                    //System.out.println(buyerCart.getItems().get(i).isChecked());
+                    System.out.println(buyerCart.getItems().get(i).isChecked());
                     break;
                 }
             }
@@ -175,6 +176,8 @@ public class Cart_Relevant {
         String user_name = null;
         if (request.getSession().getAttribute("user_name") != null)
             user_name = request.getSession().getAttribute("user_name").toString();
+
+
         String buyerCartValue = null;
         RedisUtil redisUtil = null;
         if (user_name == null){
@@ -182,7 +185,6 @@ public class Cart_Relevant {
             //利用buyerCart字符串作为键名
             // 购物车的值作为键值
             buyerCartValue = CookieUtil.getCookie(request, "buyerCart");
-
             if(buyerCartValue == null){
                 //如果等于null，说明没有购物车信息存在，需要重新构造一个购物车。
                 buyerCart = new BuyerCart();
@@ -195,24 +197,21 @@ public class Cart_Relevant {
                 if(buyerCart.getItems() != null || buyerCart.getItems().size() > 0)
                     index = buyerCart.findItem(buyerItem);
                 if(index>=0){
-                    //System.out.println(2);
                     //被删掉或者导入过redis
-                    if( buyerCart.getItems().get(index).isHave()==false||buyerCart.getItems().get(index).isChecked()==true){
+                    if( buyerCart.getItems().get(index).isHave()==false||buyerCart.getItems().get(index).isImpo()==true){
                         buyerCart.getItems().get(index).setHave(true);
-                        buyerCart.getItems().get(index).setChecked(false);
+                        buyerCart.getItems().get(index).setChecked(false);//不选中
+                        buyerCart.getItems().get(index).setImpo(false);//没导入
                         buyerCart.getItems().get(index).setAmount(amount);
                     }else{
                         buyerCart.getItems().get(index).incrementAmount(amount);
-
                     }
                 }else
                 {
-                   // System.out.println(1);
                     buyerCart.addItem(buyerItem);
                 }
                 String fromObject = JSON.toJSONString(buyerCart);
                 CookieUtil.writeCookie(response, "buyerCart", fromObject);
-               // System.out.println(fromObject);
             }
         }else
         {
@@ -238,9 +237,9 @@ public class Cart_Relevant {
                 {
                     buyerCart.addItem(buyerItem);
                 }
-                String fromObject = JSON.toJSONString(buyerCart);
-                redisUtil.set(user_name, fromObject.toString());
             }
+            String fromObject = JSON.toJSONString(buyerCart);
+            redisUtil.set(user_name, fromObject.toString());
 
         }
         //存入成功后刷新购物车或者购物车的js代码。

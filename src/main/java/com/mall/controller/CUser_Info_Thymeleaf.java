@@ -1,6 +1,8 @@
 package com.mall.controller;
 
+import com.mall.entity.Class_info;
 import com.mall.entity.User_info;
+import com.mall.service.Class_infoService;
 import com.mall.service.User_infoService;
 import com.mall.util.CookieUtil;
 import org.apache.catalina.User;
@@ -12,12 +14,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class CUser_Info_Thymeleaf {
     @Autowired
     private User_infoService user_infoService;
-
+    @Autowired
+    private Class_infoService classinfoservice;
     //通过手机号登录
     @RequestMapping("login")
     public String showLogin(){
@@ -33,6 +38,9 @@ public class CUser_Info_Thymeleaf {
     @RequestMapping("index")//返回主页面
     public String showIndex(Model model, HttpServletRequest request){
         //index页面分成登录和没登录2种情况。没登录商品存cookie，登录存redis。
+        List<Class_info>ans =new ArrayList<Class_info>();
+        ans=classinfoservice.class_all();
+        model.addAttribute("ans",ans);
          return "index";
     }
     @RequestMapping("checklogin")

@@ -19,8 +19,8 @@ public class Order_info {
     private String pya_date;
     private String send_date;
     private String end_date;
-    private String user_say;
-    private String user_evaluation;
+    private String user_say;//表示是否付钱
+    private String user_evaluation;//表示是否评论
 
     public String getSeller_name() {
         return seller_name;

@@ -5,8 +5,11 @@
   <title>Document</title>
   <link rel="stylesheet" type="text/css" href="../res/static/css/main.css">
   <link rel="stylesheet" type="text/css" href="../res/layui/css/layui.css">
-  <script type="text/javascript" src="../res/layui/layui.js"></script>
+  <link rel="stylesheet" href="../res/static/css/order.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
   <script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"/>
+  <script type="text/javascript" src="../res/layui/layui.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
 </head>
@@ -22,7 +25,8 @@
       <div class="login" th:if="${session.user_name}== null"><a href="/login">登录</a></div>
       <div class="login" th:if="${session.user_name}!= null"><a  th:text="${session.user_name}">登录</a></div>
       <div class="login" th:if="${session.user_name}!= null"><a th:href="@{logout}" >注销</a></div>
-      <div class="sp-cart"><a href="shopcart.html">购物车</a><span>2</span></div>
+      <div class="sp-cart" th:if="${session.user_name}== null"><a href="show_cart">购物车</a><span>2</span></div>
+      <div class="sp-cart" th:if="${session.user_name}!= null"><a href="import_buyerCart">购物车</a><span>2</span></div>
     </div>
   </div>
 </div>
@@ -73,7 +77,7 @@
       <div class="th th-chk">
         <div class="select-all">
           <div class="cart-checkbox">
-            <input class="check-all check" id="allCheckked" type="checkbox" value="false" th:onclick="'javascript:checkall('+this+');'">
+            <input class="check-all check" name="check-all" id="allCheckked" type="checkbox" value="false" th:onclick="'javascript:checkall('+this+');'">
           </div>
           <label>&nbsp;&nbsp;全选</label>
         </div>
@@ -104,7 +108,7 @@
         </div>
       </div>
     </div>
-    <div class="OrderList"  th:each="item, itemStat:${buyerCart.items}" th:if="${item.isHave()}">
+    <div class="OrderList" th:each="item, itemStat:${buyerCart.items}" th:if="${item.isHave()}">
       <div class="order-content" id="list-cont">
         <div th:text="${item.sku_info.seller_name}">卖家信息 </div>
         <div class="order-content" id="list-cont">
@@ -131,10 +135,10 @@
             </li>
             <li class="th th-amount">
               <div class="box-btn layui-clear">
-                <div class="less layui-btn" th:onclick="'javascript:dec('+this+','+${item.sku_info.sku_id}+','+${item.amount}+');'">-</div>
+                <div class="less layui-btn" th:onclick="'javascript:dec('+this+','+${item.sku_info.sku_id}+','+${item.sku_info.price}+');'">-</div>
 
-                <input class="Quantity-input" id="mount" type="" name="" value="1" disabled="disabled" th:value="${item.amount}">
-                <div class="add layui-btn up" th:onclick="'javascript:up('+this+','+${item.sku_info.sku_id}+','+${item.amount}+');'">+</div>
+                <input class="Quantity-input mount" id="mount" type="" name="" value="1" disabled="disabled" th:value="${item.amount}">
+                <div class="add layui-btn up" th:onclick="'javascript:up('+this+','+${item.sku_info.sku_id}+','+${item.sku_info.price}+');'">+</div>
                 <span style="display: none;" id="comid" th:text="${item.sku_info.sku_id}"></span>
                 <span style="display: none;" id="price" th:text="${item.sku_info.price}"></span>
               </div>
@@ -151,52 +155,14 @@
     </div>
 
 
-    <!-- 模版导入数据 -->
-    <!-- <script type="text/html" id="demo">
-      {{# layui.each(d.infoList,function(index,item){}}
-        <ul class="item-content layui-clear">
-          <li class="th th-chk">
-            <div class="select-all">
-              <div class="cart-checkbox">
-                <input class="CheckBoxShop check" id="" type="checkbox" num="all" name="select-all" value="true">
-              </div>
-            </div>
-          </li>
-          <li class="th th-item">
-            <div class="item-cont">
-              <a href="javascript:;"><img src="../res/static/img/paging_img1.jpg" alt=""></a>
-              <div class="text">
-                <div class="title">宝宝T恤棉质小衫</div>
-                <p><span>粉色</span>  <span>130</span>cm</p>
-              </div>
-            </div>
-          </li>
-          <li class="th th-price">
-            <span class="th-su">189.00</span>
-          </li>
-          <li class="th th-amount">
-            <div class="box-btn layui-clear">
-              <div class="less layui-btn">-</div>
-              <input class="Quantity-input" type="" name="" value="1" disabled="disabled">
-              <div class="add layui-btn">+</div>
-            </div>
-          </li>
-          <li class="th th-sum">
-            <span class="sum">189.00</span>
-          </li>
-          <li class="th th-op">
-            <span class="dele-btn">删除</span>
-          </li>
-        </ul>
-      {{# });}}
-    </script> -->
+
 
 
     <div class="FloatBarHolder layui-clear" style="position:fixed;top: 485px;width: 1198px;">
       <div class="th th-chk">
         <div class="select-all">
           <div class="cart-checkbox">
-            <input class="check-all check" id="single_select" name="select-all" type="checkbox"  value="true">
+            <input class="check-all check" id="single_select" name="select-all-ed" type="checkbox"  value="true">
           </div>
           <label>&nbsp;&nbsp;已选<span class="Selected-pieces">0</span>件</label>
         </div>
@@ -205,22 +171,69 @@
         <span class="batch-dele-btn">批量删除</span>
       </div>
       <div class="th Settlement">
-        <button class="layui-btn"><a class="order" href="add_order">结算</a></button>
+        <a class="order" onclick="jiesuan()" ><button class="layui-btn">结算</button></a>
       </div>
       <div class="th total">
-        <p>应付：<span class="pieces-total">0</span></p>
+        <p>应付：<span class="pieces-total">0.0</span></p>
       </div>
     </div>
   </div>
 </div>
-
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title" id="myModalLabel">
+          模态框（Modal）标题
+        </h4>
+      </div>
+      <div class="modal-body">
+        <img src="res/static/img/020101_1.jpg" alt="" width="100px" height="100px">
+        <p>商品信息</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+        </button>
+        <button type="button" class="btn btn-primary">
+          提交更改
+        </button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal -->
+</div>
 <script type="text/javascript">
   $('.Quantity-input').click(function () {
     alert("ddd");
   });
 </script>
 <script th:inline="javascript">
+  function jiesuan() {
 
+    if($("input[name='select-all'][value='true']").length==0){
+      alert("请先选择商品");
+      history.go(0);
+      return;
+    }else
+    {
+      if([[${session.user_name}]]==null){
+        alert("请先登录");
+        window.location.href = "login";
+        return;
+      }
+      window.location.href = "checkorder";
+    }
+
+    // if([[${session.user_name}]]!=null){
+    //   window.location.replace("add_order");
+    // }else{
+    //   window.location.replace("login");
+    // }
+
+  }
   function  dele(obj,id) {
     var temp=$(obj).parent().prev().prev().prev().prev().children().children().next().children().next().children(".pro").text();
     //alert(temp);
@@ -243,17 +256,12 @@
       }
     });
   }
-
-
-  //$('.dec').click(function () {
-  function dec(obj,id,count){
-    //alert($(this).find(".CheckBoxShop").prop("checked"));
-    //alert($(this).contents(".hidden_sku_id").val());
+  function dec(obj,id,price){
     //要解决没登录的情况。
+    var t=$(obj).next(".mount").val();
     var user_name = [[${session.user_name}]];
     var pro=$(obj).parent().parent().prev().prev().children().children().next().children().next().children(".pro").text();
-    //alert(test);
-    if(count==1){
+    if(t==1){
       alert("不能再减了！");
       return;
     }
@@ -261,42 +269,45 @@
       url: "modify_buyerItem_amount_dec",
       data: {
         sku_id: id,
-        amount:count,
+        amount:t,
         user_name: user_name,
         spproperty:pro
       },
       type: 'get',
       success: function (str){
-
-        history.go(0);
-
+        var temp=str;
+        var newpri=str*price;
+        //alert(str*price);
+        $(obj).parent().parent().next().children(".sum").text(newpri.toFixed(1));
+        //alert($(obj).next(".mount").val());
+        $(obj).next(".mount").val(temp);
+        //history.go(0);
       },
       error: function (err){
         alert("error");
       }
     });
   }
-
-  function up(obj,id,count){
-    //alert($(this).find(".CheckBoxShop").prop("checked"));
-    //alert($(this).contents(".hidden_sku_id").val());
+  function up(obj,id,price){
     //要解决没登录的情况。
+    var t=$(obj).prev(".mount").val();
     var user_name = [[${session.user_name}]];
     var pro=$(obj).prev().prev().parent().parent().prev().prev().children().children().next().children().next().children(".pro").text();
-
     $.ajax({
       url: "modify_buyerItem_amount_up",
       data: {
         sku_id: id,
-        amount:count,
+        amount:t,
         user_name: user_name,
         spproperty:pro
       },
       type: 'get',
       success: function (str){
-        //$(obj).prev(str)
-        history.go(0);
-
+        var temp=str;
+        var newpri=str*price;
+        $(obj).parent().parent().next().children(".sum").text(newpri.toFixed(1));
+        $(obj).prev(".mount").val(temp);
+        //history.go(0);
       },
       error: function (err) {
         alert("error");
@@ -305,24 +316,19 @@
   }
 </script>
 <script th:inline="javascript">
-
-  //var sumprice=0;
-
   function check1(obj,id,amount,price) {
     var user_name = [[${session.user_name}]];
     var temp=$(obj).parent().parent().parent().next().children().children().next().children().next().children(".pro");
     //alert(temp.text());
     if($(obj).val()=='true'){
-
       var smount=$(".Selected-pieces").text();
       smount=parseInt(smount)-1;
       $(obj).val(false);
       var money=amount*price;
       var sumprice=$(".pieces-total").text();
       sumprice=parseFloat(sumprice,10)-parseFloat(money,10);
-      $(".pieces-total").text(sumprice);
+      $(".pieces-total").text(sumprice.toFixed(1));
       $(".Selected-pieces").text(smount);
-
       if(user_name!=null){
         $.ajax({
           url: "modify_buyerItem_uncheck",
@@ -333,7 +339,6 @@
           },
           type: 'get',
           success: function (str){
-
           },
           error: function (err) {
             alert("error");
@@ -347,7 +352,7 @@
       var money=amount*price;
       var sumprice=$(".pieces-total").text();
       sumprice=parseFloat(sumprice,10)+parseFloat(money,10);
-      $(".pieces-total").text(sumprice);
+      $(".pieces-total").text(sumprice.toFixed(1));
       $(".Selected-pieces").text(smount);
       if(user_name!=null){
         $.ajax({
@@ -359,7 +364,6 @@
           },
           type: 'get',
           success: function (str){
-
           },
           error: function (err) {
             alert("error");
@@ -367,29 +371,13 @@
         });
       }
     }
+    if($("input[name='select-all'][value='true']").length==0){
+      $("input[name='select-all-ed']").prop('checked',false);
+      $("input[name='select-all-ed']").val(false);
+      $("input[name='check-all']").prop('checked',false);
+      $("input[name='check-all']").val(false);
+    }
   }
-
-  // $('.CheckBoxShop').click(function () {
-  //   //alert($(this).find(".CheckBoxShop").prop("checked"));
-  //   //alert($(this).contents(".hidden_sku_id").val());
-  //   //要解决没登录的情况。
-  //   var user_name = [[${session.user_name}]];
-  //   $.ajax({
-  //     url:"set_buyerItem_check_status",
-  //     data:{
-  //       sku_id:$(this).next(".hidden_sku_id").val(),
-  //       sku_status: $(this).prop("checked"),
-  //       user_name: user_name
-  //     },
-  //     type:'post',
-  //     success:function (str) {
-  //       alert(str);
-  //     },
-  //     error:function (err) {
-  //       alert(err);
-  //     }
-  //   });
-  // });
 </script>
 <script type="text/javascript">
   /*layui.config({
@@ -421,62 +409,37 @@
   function checkall(obj){
     var value=$(obj).val();
     if(value=='true'){
-
+      var ans=0;
+      $("input[name='check-all']").prop('checked',false);
+      $("input[name='check-all']").val(false);
+      $("input[name='select-all']").prop('checked',false);
+      $("input[name='select-all']").val(false);
+      $("input[name='select-all-ed']").prop('checked',false);
+      $("input[name='select-all-ed']").val(false);
+      //总价
+      $(".pieces-total").text(ans.toFixed(1));
+      //已选件数
+      $(".Selected-pieces").text(0);
     }else{
+      var num=$("input[name='select-all']").length;
       var ans=0;
       $(obj).val(true);
-      //alert($(obj).val());
+      $("input[name='check-all']").prop('checked',true);
+      $("input[name='check-all']").val(true);
       $("input[name='select-all']").prop('checked',true);
       $("input[name='select-all']").val(true);
+      $("input[name='select-all-ed']").prop('checked',true);
+      $("input[name='select-all-ed']").val(true);
+      //已选件数
+      $(".Selected-pieces").text(num);
       var $elements = $('.sum');
       $elements.each(function () {
-        //alert($(this).text());
-        //alert($(this).text());
         ans=parseFloat(ans)+parseFloat(($(this).text()));
       });
-        //alert(ans);
-      $(".pieces-total").text(ans);
+      $(".pieces-total").text(ans.toFixed(1));
     }
-    //alert(value);
   }
 
-  // $('.check-all').click(function () {
-  //   if($(this).prop("checked")){
-  //     $(".cart :checkbox").prop("checked", true);
-  //   }
-  //   else {
-  //     $(".cart :checkbox").prop("checked", false);
-  //   }
-  //   var user_name = [[${session.user_name}]];
-  //   var arr_status = new Array();
-  //   var arr_sku_id = new Array();
-  //   var arr_sku_status = new Array();
-  //   var arr_sku_info = new Array();
-  //   $(".cart").find("input:checkbox").each(function (m){
-  //     arr_status[m] = $(this).prop("checked");
-  //     arr_sku_id[m] = $(this).next(".hidden_sku_id").val();
-  //   });
-  //   for (i = 1; i < arr_status.length - 1; i++){
-  //     arr_sku_status[i-1] = arr_status[i];
-  //     arr_sku_info[i-1] = arr_sku_id[i];
-  //   }
-  //   //alert(arr_sku_status + "|" + arr_sku_info);
-  //   $.ajax({
-  //     url:"set_all_buyerItem_check_status",
-  //     data:{
-  //       arr_sku_info:arr_sku_info.join('-'),
-  //       arr_sku_status: arr_sku_status.join('-'),
-  //       user_name: user_name
-  //     },
-  //     type:'post',
-  //     success:function (str) {
-  //       alert(str);
-  //     },
-  //     error:function (err) {
-  //       alert(err);
-  //     }
-  //   });
-  // });
 </script>
 </body>
 </html>
