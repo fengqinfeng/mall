@@ -1,4 +1,13 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html><!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -76,30 +85,30 @@
 <div class="row col-lg-10">
     <div style="margin-left: 110px;">
         <a href="show_order2"><button type="button" class="btn btn-primary" >稍后付款</button></a>
-    <button type="button" class="btn btn-primary" onclick="f();">立即付款</button>
+        <button type="button" class="btn btn-primary" onclick="f();">确认付款</button>
     </div>
     <p style="display: none;" class="id" th:text="${orderid}"></p>
 </div>
 <script type="text/javascript" th:inline="javascript">
-function f() {
-    var id=$(".id").text();
-    $.ajax({
-        type: "get",
-        url: "paynow",
-        data: {
-            id:id
-        },
-        success: function (data) {
-            if(data=="ok"){
-                alert("付款成功！");
-                window.location.href="show_order2";
+    function f(){
+        var id=$(".id").text();
+        $.ajax({
+            type: "get",
+            url: "payo",
+            data: {
+                id:id
+            },
+            success: function (data) {
+                if(data=="ok"){
+                    alert("付款成功！");
+                    window.location.href="show_order2";
+                }
             }
-        }
-    });
+        });
 
 
 
-}
+    }
 
 </script>
 

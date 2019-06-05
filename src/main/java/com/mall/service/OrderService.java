@@ -23,6 +23,11 @@ public class OrderService {
     @Autowired Order_itemMapper order_itemMapper;
     @Autowired Sku_infoMapper sku_infoMapper;
 
+    public int payed(int order_id,String user_say){
+        return orderMapper.payed(order_id,user_say);
+    }
+
+
     public Order_item_info orderiteminfo(int itemid){
         return order_itemMapper.selectitem(itemid);
     }

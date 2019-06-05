@@ -169,6 +169,7 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>
+<p style="display: none;" class="orid" th:text="${orderid}"></p>
 <script type="text/javascript" th:inline="javascript">
     function pay() {
         var elements = $('.sum');
@@ -179,18 +180,18 @@
         });
         //地址
         var add=$(".defaultadd").text();
-        window.location.href="paymoney?address="+add;
-        // $.ajax({
-        //     type: "get",
-        //     url: "paymoney",
-        //     data: {
-        //         address:add
-        //     },
-        //     success: function (data) {
-        //         if(data=="ok")
-        //             window.location.href="paym?sum="+ans;
-        //     }
-        // });
+        var order_id=$(".orid").text();
+        $.ajax({
+            type: "get",
+            url: "paymoney",
+            data: {
+                address:add
+            },
+            success: function (data) {
+                if(data=="ok")
+                    window.location.href="paym?sum="+ans+"&orderid="+order_id;
+            }
+        });
     }
     function select(obj) {
         //alert($(".defaultadd").text());

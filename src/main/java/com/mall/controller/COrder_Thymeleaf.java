@@ -38,6 +38,19 @@ public class COrder_Thymeleaf {
         return "check_order";
     }
 
+
+    //跳到单个支付的页面
+    @RequestMapping("paysingle")
+    public String paysingle(HttpServletRequest request, HttpServletResponse response, Model model){
+        int money=Integer.parseInt(request.getParameter("money").toString());
+        int id=Integer.parseInt(request.getParameter("id").toString());
+        model.addAttribute("sum",money);
+        model.addAttribute("orderid",id);
+
+        return "payone";
+    }
+
+
     //跳转到评价页面
     @RequestMapping("evalu_page")
     public String eva(HttpServletRequest request, Model model){
@@ -54,111 +67,18 @@ public class COrder_Thymeleaf {
     }
 
 
-    //付款页面
+
+    //显示付款页面
     @RequestMapping("paym")
     public String paym(HttpServletRequest request, HttpServletResponse response, Model model){
         String sum=request.getParameter("sum").toString();
-
+        int orderid=Integer.parseInt(request.getParameter("orderid").toString());
+        model.addAttribute("orderid",orderid);
         model.addAttribute("sum",sum);
         return "pay";
     }
 
-    //确认订单后之后就生成订单 并跳转到付钱页面
-    @RequestMapping("paymoney")
-    public String paymoney(HttpServletRequest request, HttpServletResponse response, Model model){
-        //根据用户的id或者姓名，取得默认地址。显示在界面上。
-        int user_id = Integer.parseInt(request.getSession().getAttribute("user_id").toString());
-        String user_name = request.getSession().getAttribute("user_name").toString();
-        String add=request.getParameter("address").toString();
-        int maxorderid1=orderService.maxid();
-        //获取默认地址。没有默认地址的情况先不管
-        Address_info address_info = address_infoService.selectoneaddress(user_id,add);
-        //从redis购物车里面取出来选中的商品，显示在界面上
-        RedisUtil redisUtil = (RedisUtil) SpringUtil.applicationContext.getBean("redisUtil");//从spring容器里面得到一个对象
-        String buyerCartValue = redisUtil.get(user_name);
-        BuyerCart buyerCart = JSON.parseObject(buyerCartValue, new TypeReference<BuyerCart>() {});
-        String dd=redisUtil.get(user_name + "_check_item");
-        //如果这个用户没有订单信息
-        //System.out.println(dd);
-        if(dd==null){
-            //System.out.println("y");
-            BuyerCart_Patch buyercartpatch=new BuyerCart_Patch();
-            String fromObject = JSON.toJSONString(buyercartpatch);
-            redisUtil.set(user_name + "_check_item", fromObject.toString());
-            dd=redisUtil.get(user_name + "_check_item");
-        }
-        BuyerCart_Patch ans=JSON.parseObject(dd, new TypeReference<BuyerCart_Patch>() {});
-        //因为一起结算，最后可能生成不止一个订单
-        List<BuyerItem_Patch> item_patchList = new ArrayList<BuyerItem_Patch>();
-        //System.out.println(buyerCart.getItems().get(0).getSku_info().getSeller_name());
 
-        //isCheckedItem.setSeller_id(-1);
-        List<Sku_info> te=new ArrayList<>();
-        int pan[]=new int[100];
-        for (int i = 0; i < buyerCart.getItems().size(); i++) {
-            //表示有这个卖家id
-            if(buyerCart.getItems().get(i).isChecked()==true){
-                pan[buyerCart.getItems().get(i).getSku_info().getSeller_id()]=1;
-                //System.out.println(buyerCart.getItems().get(i).getSku_info().getSku_id());
-            }
-
-        }
-        for(int i=0;i<pan.length;i++){
-            if(pan[i]==1){
-                //System.out.println(i);
-                BuyerItem_Patch isCheckedItem = new BuyerItem_Patch();
-                for(int j=0;j<buyerCart.getItems().size();j++){
-                    int num=0;
-                    //System.out.println(buyerCart.getItems().get(j).getSku_info().getSeller_id());
-                    if(buyerCart.getItems().get(j).isChecked()&&buyerCart.getItems().get(j).getSku_info().getSeller_id()==i){
-                        //System.out.println(1);
-                        isCheckedItem.setSeller_id(buyerCart.getItems().get(j).getSku_info().getSeller_id());
-                        isCheckedItem.setSeller_name(buyerCart.getItems().get(j).getSku_info().getSeller_name());
-                        buyerCart.getItems().get(j).setChecked(false);
-                        buyerCart.getItems().get(j).setHave(false);
-
-                        Sku_info inn=buyerCart.getItems().get(j).getSku_info();
-                        inn.setBuyAmount(buyerCart.getItems().get(j).getAmount());
-                        isCheckedItem.addSku_info(inn);
-                        //System.out.println(isCheckedItem.getSku_infoList().get(0).getProduct_class_name());
-                        //System.out.println(buyerCart.getItems().get(j).getSku_info().getProduct_class_name());
-                    }
-                }
-                item_patchList.add(isCheckedItem);
-            }
-        }
-        //itemlist是一个用户的所有订单列表，其中一个订单包含多个商品
-        //isCheckedItem.setSku_infoList(te);
-        //存在卖家信息
-//        if (isCheckedItem.getSeller_id() != -1)
-//            item_patchList.add(isCheckedItem);  //加入新的订单信息
-        if (item_patchList!=null){
-            for(int i=0;i<item_patchList.size();i++) {
-                ans.addItem(item_patchList.get(i));
-            }
-        }
-        orderService.InsertOrder_Patch(item_patchList,user_id,address_info);
-        int maxorderid2=orderService.maxid();
-        //BuyerCart_Patch checkedBuyerCart = new BuyerCart_Patch();
-        //checkedBuyerCart.addItem();
-
-        String fromObject = JSON.toJSONString(ans);
-        redisUtil.set(user_name + "_check_item", fromObject.toString());
-
-        String fromObject2 = JSON.toJSONString( buyerCart);
-        redisUtil.set(user_name, fromObject2.toString());
-
-        model.addAttribute("default_address", address_info);
-        model.addAttribute("itemList", item_patchList);
-        List<Order_info> order=orderService.showorderbysql(user_id);
-
-        model.addAttribute("maxorderid1",maxorderid1);
-        model.addAttribute("maxorderid2",maxorderid2);
-        model.addAttribute("ans", order);
-        //model.addAttribute("cart", checkedBuyerCart);
-
-        return "pay";
-    }
 
 
     //显示所有订单
@@ -255,6 +175,8 @@ public class COrder_Thymeleaf {
                 ans.addItem(item_patchList.get(i));
             }
         }
+        int orderid=orderService.maxid();
+        model.addAttribute("orderid",orderid);
         model.addAttribute("ans",ans);
         model.addAttribute("address",address);
         return "check_order";

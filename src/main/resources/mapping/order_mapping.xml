@@ -45,9 +45,15 @@
       ORDER BY order_time DESC
   </select>
 
+    <update id="payed">
+        update order_info set user_say = #{user_say}
+        where order_id=#{order_id}
+    </update>
+
     <select id="maxid" resultType="java.lang.Integer">
       select max(order_id) from order_info;
     </select>
+
     <insert id="insertOrder" parameterType="com.mall.entity.Order_info"
             keyProperty="order_id" useGeneratedKeys="true">
         insert into order_info(user_id, seller_id,allmoney,

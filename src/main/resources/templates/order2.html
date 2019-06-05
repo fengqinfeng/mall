@@ -199,7 +199,7 @@
                     </td>
                     <td style="text-align: center" >
                         <p th:if="${item.user_say eq '0' && itStat.index eq 0}">
-                            <a th:onclick="'javascript:pay('+this+','+${item.allmoney}+');'"  th:text="未付款" ></a>
+                            <a th:onclick="'javascript:pay('+this+','+${item.allmoney}+','+${item.order_id}+');'"  th:text="未付款" ></a>
                         </p>
                         <p th:if="${item.user_say eq '1' && itStat.index eq 0}" th:text="已付款">
                         <p th:if="${it.user_eva} eq 0">
@@ -265,10 +265,22 @@
         </nav>
     </div>
 </div>
+
 <script th:inline="javascript">
 
-    function pay(obj,money) {
-        window.location.href="paym?sum="+money;
+    function pay(obj,money,id) {
+        // $.ajax({
+        //     type: "get",
+        //     url: "paysingle",
+        //     data: {
+        //         id:id
+        //     },
+        //     success: function (data) {
+        //         if(data=="ok")
+        //             window.location.href="show_order2";
+        //     }
+        // });
+        window.location.href="paysingle?money="+money+"&id="+id;
     }
 
     function f(obj,skuid,itemid) {
