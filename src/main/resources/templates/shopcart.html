@@ -19,7 +19,7 @@
   <div class="site-nav w1200">
     <p class="sn-back-home">
       <i class="layui-icon layui-icon-home"></i>
-      <a href="#">首页</a>
+      <a href="index">首页</a>
     </p>
     <div class="sn-quick-menu">
       <div class="login" th:if="${session.user_name}== null"><a href="/login">登录</a></div>
@@ -60,7 +60,7 @@
     <div class="inner-cont0">
       <div class="inner-cont1 w1200">
         <div class="inner-cont2">
-          <a href="commodity.html" class="active">所有商品</a>
+          <a href="index" class="active">所有商品</a>
           <a href="buytoday.html">今日团购</a>
           <a href="information.html">母婴资讯</a>
           <a href="about.html">关于我们</a>
@@ -116,7 +116,7 @@
             <li class="th th-chk">
               <div class="select-all">
                 <div class="cart-checkbox">
-                  <input class="CheckBoxShop check" id="checkone" type="checkbox" num="all" name="select-all" th:value="false" th:onclick="'javascript:check1('+this+','+${item.sku_info.sku_id}+','+${item.amount}+','+${item.sku_info.price}+');'" />
+                  <input class="CheckBoxShop check" id="checkone" type="checkbox" num="all" name="select-all" th:value="false" th:onclick="'javascript:check1('+this+','+${item.sku_info.sku_id}+','+${item.sku_info.price}+');'" />
                   <input class="hidden_sku_id" type="hidden" th:value="${item.sku_info.sku_id}">
                 </div>
               </div>
@@ -154,10 +154,6 @@
       </div>
     </div>
 
-
-
-
-
     <div class="FloatBarHolder layui-clear" style="position:fixed;top: 485px;width: 1198px;">
       <div class="th th-chk">
         <div class="select-all">
@@ -167,14 +163,12 @@
           <label>&nbsp;&nbsp;已选<span class="Selected-pieces">0</span>件</label>
         </div>
       </div>
-      <div class="th batch-deletion">
-        <span class="batch-dele-btn">批量删除</span>
-      </div>
+
       <div class="th Settlement">
         <a class="order" onclick="jiesuan()" ><button class="layui-btn">结算</button></a>
       </div>
       <div class="th total">
-        <p>应付：<span class="pieces-total">0.0</span></p>
+        <p>应付：<span class="pieces-total">0</span></p>
       </div>
     </div>
   </div>
@@ -211,6 +205,8 @@
   });
 </script>
 <script th:inline="javascript">
+
+
   function jiesuan() {
 
     if($("input[name='select-all'][value='true']").length==0){
@@ -226,13 +222,6 @@
       }
       window.location.href = "checkorder";
     }
-
-    // if([[${session.user_name}]]!=null){
-    //   window.location.replace("add_order");
-    // }else{
-    //   window.location.replace("login");
-    // }
-
   }
   function  dele(obj,id) {
     var temp=$(obj).parent().prev().prev().prev().prev().children().children().next().children().next().children(".pro").text();
@@ -256,7 +245,7 @@
       }
     });
   }
-  function dec(obj,id,price){
+  function dec(obj,id,price) {
     //要解决没登录的情况。
     var t=$(obj).next(".mount").val();
     var user_name = [[${session.user_name}]];
@@ -277,11 +266,14 @@
       success: function (str){
         var temp=str;
         var newpri=str*price;
-        //alert(str*price);
         $(obj).parent().parent().next().children(".sum").text(newpri.toFixed(1));
-        //alert($(obj).next(".mount").val());
         $(obj).next(".mount").val(temp);
-        //history.go(0);
+        var checkstatus=$(obj).parent().parent().prev().prev().prev().children().children().children("#checkone").val();
+        if(checkstatus=='true'){
+            var t=$(".pieces-total").text();
+            t=t-price;
+            $(".pieces-total").text(t.toFixed(1));
+        }
       },
       error: function (err){
         alert("error");
@@ -307,7 +299,14 @@
         var newpri=str*price;
         $(obj).parent().parent().next().children(".sum").text(newpri.toFixed(1));
         $(obj).prev(".mount").val(temp);
-        //history.go(0);
+          var checkstatus=$(obj).parent().parent().prev().prev().prev().children().children().children("#checkone").val();
+
+          if(checkstatus=='true'){
+              var t=$(".pieces-total").text();
+              t=Number(t)+Number(price);
+
+              $(".pieces-total").text(t.toFixed(1));
+          }
       },
       error: function (err) {
         alert("error");
@@ -316,9 +315,10 @@
   }
 </script>
 <script th:inline="javascript">
-  function check1(obj,id,amount,price) {
+  function check1(obj,id,price) {
     var user_name = [[${session.user_name}]];
     var temp=$(obj).parent().parent().parent().next().children().children().next().children().next().children(".pro");
+    var amount=$(obj).parent().parent().parent().next().next().next().children().children().next("#mount").val();
     //alert(temp.text());
     if($(obj).val()=='true'){
       var smount=$(".Selected-pieces").text();
@@ -327,7 +327,12 @@
       var money=amount*price;
       var sumprice=$(".pieces-total").text();
       sumprice=parseFloat(sumprice,10)-parseFloat(money,10);
-      $(".pieces-total").text(sumprice.toFixed(1));
+      if(sumprice!=0){
+          $(".pieces-total").text(sumprice.toFixed(1));
+      }else{
+          $(".pieces-total").text(sumprice);
+      }
+
       $(".Selected-pieces").text(smount);
       if(user_name!=null){
         $.ajax({
@@ -352,7 +357,11 @@
       var money=amount*price;
       var sumprice=$(".pieces-total").text();
       sumprice=parseFloat(sumprice,10)+parseFloat(money,10);
-      $(".pieces-total").text(sumprice.toFixed(1));
+        if(sumprice!=0){
+            $(".pieces-total").text(sumprice.toFixed(1));
+        }else{
+            $(".pieces-total").text(sumprice);
+        }
       $(".Selected-pieces").text(smount);
       if(user_name!=null){
         $.ajax({
@@ -379,36 +388,14 @@
     }
   }
 </script>
-<script type="text/javascript">
-  /*layui.config({
-      base: '../res/static/js/util/' //你存放新模块的目录，注意，不是layui的模块目录
-  }).use(['mm','jquery','element','car'],function(){
-      var mm = layui.mm,$ = layui.$,element = layui.element,car = layui.car;
-
-      // 模版导入数据
-      // var html = demo.innerHTML,
-      // listCont = document.getElementById('list-cont');
-      // mm.request({
-      //   url: '../json/shopcart.json',
-      //   success : function(res){
-      //     listCont.innerHTML = mm.renderHtml(html,res)
-      //     element.render();
-      //     car.init()
-      //   },
-      //   error: function(res){
-      //     console.log(res);
-      //   }
-      // })
-      //
-      car.init()
-
-
-  });*/
-</script>
 <script th:inline="javascript">
   function checkall(obj){
+    var user_name = [[${session.user_name}]];
     var value=$(obj).val();
+    //取消选中
     if(value=='true'){
+
+
       var ans=0;
       $("input[name='check-all']").prop('checked',false);
       $("input[name='check-all']").val(false);
@@ -417,10 +404,30 @@
       $("input[name='select-all-ed']").prop('checked',false);
       $("input[name='select-all-ed']").val(false);
       //总价
-      $(".pieces-total").text(ans.toFixed(1));
+        if(ans!=0){
+            $(".pieces-total").text(ans.toFixed(1));
+        }else{
+            $(".pieces-total").text(ans);
+        }
       //已选件数
       $(".Selected-pieces").text(0);
+        if(user_name!=null){
+          $.ajax({
+            url: "modify_buyerItem_selectall_cancel",
+            data: {
+              user_name: user_name
+            },
+            type: 'get',
+            success: function (str){
+            },
+            error: function (err) {
+              alert("error");
+            }
+          });
+        }
+      //选中
     }else{
+
       var num=$("input[name='select-all']").length;
       var ans=0;
       $(obj).val(true);
@@ -436,7 +443,27 @@
       $elements.each(function () {
         ans=parseFloat(ans)+parseFloat(($(this).text()));
       });
-      $(".pieces-total").text(ans.toFixed(1));
+        if(ans!=0){
+            $(".pieces-total").text(ans.toFixed(1));
+        }else{
+            $(".pieces-total").text(ans);
+        }
+
+
+      if(user_name!=null){
+        $.ajax({
+          url: "modify_buyerItem_selectall",
+          data: {
+            user_name: user_name
+          },
+          type: 'get',
+          success: function (str){
+          },
+          error: function (err) {
+            alert("error");
+          }
+        });
+      }
     }
   }
 

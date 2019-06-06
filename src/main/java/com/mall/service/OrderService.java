@@ -27,6 +27,9 @@ public class OrderService {
         return orderMapper.payed(order_id,user_say);
     }
 
+    public List<Order_info> orderinfo_payed(int user_id){
+        return orderMapper.orderinfo_payed(user_id);
+    }
 
     public Order_item_info orderiteminfo(int itemid){
         return order_itemMapper.selectitem(itemid);

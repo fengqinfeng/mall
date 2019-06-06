@@ -148,22 +148,11 @@ public class CBuyCart {
             redisUtil = (RedisUtil) SpringUtil.applicationContext.getBean("redisUtil");//从spring容器里面得到一个对象
             buyerCartValue = redisUtil.get(user_name);
         }
-        //System.out.println("从cookie或者redis取出来的值:" + buyerCartValue);
-//        if(buyerCartValue == null){//需要测试一下哪个不出错。
-//            //如果等于null，说明没有购物车信息存在，需要重新构造一个购物车。
-//            buyerCart = new BuyerCart();
-//        }
+
         if(buyerCartValue!=null){//说明存在购物车字符串键值，取出来反序列化成购物车对象。
             buyerCart = JSON.parseObject(buyerCartValue, new TypeReference<BuyerCart>(){});
 
         }
-        //System.out.println(buyerCart.getItems().size());
-        //BuyerItem item = buyerCart.getItems().get(0);
-        //System.out.println(".........." + item.getAmount());
-        //System.out.println(buyerCartValue);
-        //System.out.println(buyerCart.getItems().size());
-        //System.out.println(buyerCart);
-
         model.addAttribute("buyerCart", buyerCart);
         return "shopcart";
     }

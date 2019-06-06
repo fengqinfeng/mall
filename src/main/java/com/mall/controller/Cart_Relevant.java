@@ -24,6 +24,54 @@ public class Cart_Relevant {
     @Autowired
     private Sku_infoService sku_infoService;
 
+
+    @ResponseBody
+    @RequestMapping("modify_buyerItem_selectall")
+    public String modifybuyerItemselectall(HttpServletRequest request,HttpServletResponse response){
+        String user_name = request.getParameter("user_name");
+        if( request.getSession().getAttribute("user_name")!=null){
+            RedisUtil redisUtil = (RedisUtil) SpringUtil.applicationContext.
+                    getBean("redisUtil");
+            String buyerCartValue = redisUtil.get(user_name);
+            BuyerCart buyerCart = JSON.parseObject(buyerCartValue, new TypeReference<BuyerCart>(){});
+            for (int i = 0; i < buyerCart.getItems().size(); i++){
+                if (buyerCart.getItems().get(i).isHave()==true&&buyerCart.getItems().get(i).isChecked()==false){
+                    buyerCart.getItems().get(i).setChecked(true);
+                    //System.out.println(buyerCart.getItems().get(i).isChecked());
+
+                }
+            }
+            String fromObject = JSON.toJSONString(buyerCart);
+            redisUtil.set(user_name, fromObject.toString());
+        }
+
+        return "ok";
+    }
+
+
+    @ResponseBody
+    @RequestMapping("modify_buyerItem_selectall_cancel")
+    public String modifybuyerItemselectallcancel(HttpServletRequest request,HttpServletResponse response){
+        String user_name = request.getParameter("user_name");
+        if( request.getSession().getAttribute("user_name")!=null){
+            RedisUtil redisUtil = (RedisUtil) SpringUtil.applicationContext.
+                    getBean("redisUtil");
+            String buyerCartValue = redisUtil.get(user_name);
+            BuyerCart buyerCart = JSON.parseObject(buyerCartValue, new TypeReference<BuyerCart>(){});
+            for (int i = 0; i < buyerCart.getItems().size(); i++){
+                if (buyerCart.getItems().get(i).isHave()==true&&buyerCart.getItems().get(i).isChecked()==true){
+                    buyerCart.getItems().get(i).setChecked(false);
+                    //System.out.println(buyerCart.getItems().get(i).isChecked());
+
+                }
+            }
+            String fromObject = JSON.toJSONString(buyerCart);
+            redisUtil.set(user_name, fromObject.toString());
+        }
+
+        return "ok";
+    }
+
     @ResponseBody
     @RequestMapping("modify_buyerItem_check")
     public int modifyBuyerItemCheck(HttpServletRequest request,HttpServletResponse response){
@@ -154,6 +202,57 @@ public class Cart_Relevant {
         }
 
         return  amount+1;
+    }
+
+    //立即购买时先加入购物车
+    @RequestMapping("lijiaddcart")
+    @ResponseBody
+    public String lijibuyaddcart(HttpServletRequest request, HttpServletResponse response, Model model){
+        int sku_id = Integer.parseInt(request.getParameter("sku_id"));
+        int amount = Integer.parseInt(request.getParameter("amount"));
+        String user_select_property = request.getParameter("user_select_property").toString();
+        Sku_info sku_info = sku_infoService.getSingleSku_info(sku_id);
+        sku_info.setUser_select_property(user_select_property);
+        //sku_info.setChecked(true);
+        //以后在此位置添加商品的属性。
+        BuyerCart buyerCart = null;
+        BuyerItem buyerItem = new BuyerItem();
+        buyerItem.setSku_info(sku_info);
+        buyerItem.setAmount(amount);
+        buyerItem.setChecked(true);
+        String user_name = null;
+        if (request.getSession().getAttribute("user_name") != null)
+            user_name = request.getSession().getAttribute("user_name").toString();
+        String buyerCartValue = null;
+        RedisUtil redisUtil = null;
+        redisUtil = (RedisUtil) SpringUtil.applicationContext.getBean("redisUtil");
+        buyerCartValue = redisUtil.get(user_name);
+        if(buyerCartValue == null) {
+            //如果等于null，说明没有购物车信息存在，需要重新构造一个购物车。
+            buyerCart = new BuyerCart();
+            buyerCart.addItem(buyerItem);
+        }else{
+            buyerCart = JSON.parseObject(buyerCartValue, new TypeReference<BuyerCart>(){});
+            int index = -1;
+            if(buyerCart.getItems() != null || buyerCart.getItems().size() > 0)
+                index = buyerCart.findItem(buyerItem);
+            if(index>=0){
+                //if( buyerCart.getItems().get(index).isHave()==false){
+                    buyerCart.getItems().get(index).setHave(true);
+                    buyerCart.getItems().get(index).setChecked(true);
+                    buyerCart.getItems().get(index).setAmount(amount);
+               // }else{
+                    //buyerCart.getItems().get(index).incrementAmount(amount);
+                    //buyerCart.getItems().get(index).setChecked(true);
+               // }
+            }else
+            {
+                buyerCart.addItem(buyerItem);
+            }
+        }
+        String fromObject = JSON.toJSONString(buyerCart);
+        redisUtil.set(user_name, fromObject.toString());
+        return "ok";
     }
 
     @RequestMapping("addcart")

@@ -30,7 +30,7 @@ public class COrder_Thymeleaf {
 
     @RequestMapping("tee")
     public String tee(){
-        return "test";
+        return "redirect:show_order2";
     }
 
     @RequestMapping("check_order")
@@ -97,6 +97,20 @@ public class COrder_Thymeleaf {
         map.put("pageInfo",pageInfo);
         return "order2";
     }
+    //显示已付款的订单
+    @RequestMapping("show_order2_payed")
+    public String showorder2payed(HttpServletRequest request, Model model, @RequestParam(required = false,defaultValue = "1",value = "pn")Integer pn,
+                                  Map<String,Object> map){
+        int user_id = Integer.parseInt(request.getSession().getAttribute("user_id").toString());
+        String user_name = request.getSession().getAttribute("user_name").toString();
+        PageHelper.startPage(pn,10);
+        List<Order_info> ans=orderService.orderinfo_payed(user_id);
+        PageInfo pageInfo = new PageInfo<>(ans,5);
+        System.out.println(pageInfo);
+        model.addAttribute("ans", ans);
+        map.put("pageInfo",pageInfo);
+        return "order2";
+    }
 
     //已作废
     @RequestMapping("show_order")
@@ -133,7 +147,6 @@ public class COrder_Thymeleaf {
         //取到该用户在redis购物车里的商品
        String buyerCartValue = redisUtil.get(user_name);
         BuyerCart buyerCart = JSON.parseObject(buyerCartValue, new TypeReference<BuyerCart>() {});
-
         //重新开订单信息
         BuyerCart_Patch buyercartpatch=new BuyerCart_Patch();
 
