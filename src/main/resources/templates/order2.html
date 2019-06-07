@@ -135,7 +135,7 @@
                 <th style="width: 10%;"></th>
                 <th style="width: 10%;"></th>
                 <th style="width: 10%;"></th>
-                <th style="float: right;">删除订单</th>
+                <th style="float: right;"><a th:onclick="'javascript:dele('+this+','+${item.order_id}+');'">删除订单</a></th>
             </tr>
             </thead>
             <div th:each="it:${item.order_item_infoList}">
@@ -241,7 +241,21 @@
 
 <script th:inline="javascript">
 
-
+    function dele(obj,id) {
+        $.ajax({
+            url:"deleorder",
+            data:{
+                sku_id:id,
+            },
+            type:"get",
+            success: function (str){
+                window.location.href="show_order2";
+            },
+            error: function (err){
+                alert("error");
+            }
+        });
+    }
     function cancel(obj,id) {
         $.ajax({
             url:"cancelorder",

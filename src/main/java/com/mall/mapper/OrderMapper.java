@@ -14,4 +14,5 @@ public interface OrderMapper {
     public int payed(int order_id,String user_say);
     public List<Order_info> orderinfo_payed(int user_id);
     public int ordercancel(int order_id);
+    public int orderdele(int order_id);
 }

@@ -81,6 +81,10 @@
         where order_id=#{order_id}
     </update>
 
+    <update id="orderdele">
+        update order_info set order_status = 0
+        where order_id=#{order_id}
+    </update>
 
     <select id="maxid" resultType="java.lang.Integer">
       select max(order_id) from order_info;

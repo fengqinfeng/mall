@@ -29,6 +29,14 @@ public class COrder {
     @Autowired
     public Address_infoService address_infoService;
 
+    //删除订单
+    @RequestMapping("deleorder")
+    public String deleorder(HttpServletRequest request, HttpServletResponse response, Model model){
+        int id=Integer.parseInt(request.getParameter("sku_id").toString());
+        orderService.orderdele(id);
+        return "ok";
+    }
+
 
     //取消订单
     @RequestMapping("cancelorder")
