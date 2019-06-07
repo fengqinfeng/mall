@@ -14,5 +14,8 @@
         insert into ratings(user_id,item_id,rating,timestamp)
         values (#{user_id},#{item_id},#{rating},#{timestamp})
     </insert>
+    <select id="selectall" resultMap="RatingsinfoResultMap">
+        select * from ratings
+    </select>
 
 </mapper>
