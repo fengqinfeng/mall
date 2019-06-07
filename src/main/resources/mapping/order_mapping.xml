@@ -18,6 +18,7 @@
         <result column="user_say" jdbcType="VARCHAR" property="user_say" />
         <result column="order_number" jdbcType="VARCHAR" property="order_number" />
         <result column="user_evaluation" jdbcType="VARCHAR" property="user_evaluation" />
+        <result column="cancel_status" jdbcType="INTEGER" property="cancel_status" />
         <collection property="order_item_infoList"
                     ofType="com.mall.entity.Order_item_info">
             <id property="order_item_id" column="order_item_id"/>
@@ -74,6 +75,12 @@
         update order_info set user_say = #{user_say}
         where order_id=#{order_id}
     </update>
+
+    <update id="ordercancel">
+        update order_info set cancel_status = 1
+        where order_id=#{order_id}
+    </update>
+
 
     <select id="maxid" resultType="java.lang.Integer">
       select max(order_id) from order_info;

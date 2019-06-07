@@ -35,17 +35,9 @@ public class Te {
 
                 nums=Math.round(random.nextInt(4)+1);
                 bw.write(Integer.toString(nums));
-//                bw.write(",");
-//                nums=Math.round(random.nextInt(90000)+1);
-//                bw.write(Integer.toString(nums));
                 bw.newLine();
             }
-//            for(int i=0;i<10000;i++){
-//                int nums = Math.round(random.nextFloat()*1000.0f);
-//                //将int 转化为 String类型
-//                bw.write(Integer.toString(nums));
-//                bw.newLine();
-//            }
+
             bw.close();
 
         } catch (IOException e) {

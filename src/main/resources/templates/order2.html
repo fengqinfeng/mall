@@ -165,11 +165,10 @@
                     </td>
                     <td style="width: 10%;" >
                         <p th:if="${itStat.index} &lt;1">
-                            <a th:onclick="'javascript:test('+this+','+${it.user_eva}+');'">取消订单</a>
+                            <a th:if="${item.cancel_status eq 0}" th:onclick="'javascript:cancel('+this+','+${item.order_id}+');'">取消订单</a>
+                            <p th:if="${item.cancel_status eq 1}" >交易关闭</p>
                         </p>
-                        <p th:if="${itStat.index} &lt;1">
-                            <a href="">订单详情</a>
-                        </p>
+
                     </td>
                     <td style="text-align: center" >
                         <p th:if="${item.user_say eq '0' && itStat.index eq 0}">
@@ -242,18 +241,24 @@
 
 <script th:inline="javascript">
 
+
+    function cancel(obj,id) {
+        $.ajax({
+            url:"cancelorder",
+            data:{
+                sku_id:id,
+            },
+            type:"get",
+            success: function (str){
+               window.location.href="show_order2";
+            },
+            error: function (err){
+                alert("error");
+            }
+        });
+    }
+
     function pay(obj,money,id) {
-        // $.ajax({
-        //     type: "get",
-        //     url: "paysingle",
-        //     data: {
-        //         id:id
-        //     },
-        //     success: function (data) {
-        //         if(data=="ok")
-        //             window.location.href="show_order2";
-        //     }
-        // });
         window.location.href="paysingle?money="+money+"&id="+id;
     }
 

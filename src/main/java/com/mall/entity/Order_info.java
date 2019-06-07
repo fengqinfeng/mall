@@ -21,6 +21,15 @@ public class Order_info {
     private String end_date;
     private String user_say;//表示是否付钱
     private String user_evaluation;//表示是否评论
+    private int cancel_status;//1表示取消订单，交易关闭
+
+    public int getCancel_status() {
+        return cancel_status;
+    }
+
+    public void setCancel_status(int cancel_status) {
+        this.cancel_status = cancel_status;
+    }
 
     public String getSeller_name() {
         return seller_name;

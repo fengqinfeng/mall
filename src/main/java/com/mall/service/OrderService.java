@@ -23,6 +23,10 @@ public class OrderService {
     @Autowired Order_itemMapper order_itemMapper;
     @Autowired Sku_infoMapper sku_infoMapper;
 
+    public int ordercancel(int order_id){
+        return orderMapper.ordercancel(order_id);
+    }
+
     public int payed(int order_id,String user_say){
         return orderMapper.payed(order_id,user_say);
     }
@@ -69,7 +73,7 @@ public class OrderService {
             order_info.setAddress(address_info.getAddress());
             order_info.setLinkman(address_info.getLinkman());
             order_info.setTelephone(address_info.getTelephone());
-
+            order_info.setCancel_status(0);
             //随机生成20位订单号
             order_info.setOrder_number(ordernumber.getGuid());
             int orderid=maxid();

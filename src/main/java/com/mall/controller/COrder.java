@@ -29,6 +29,15 @@ public class COrder {
     @Autowired
     public Address_infoService address_infoService;
 
+
+    //取消订单
+    @RequestMapping("cancelorder")
+    public String cancelorder(HttpServletRequest request, HttpServletResponse response, Model model){
+        int id=Integer.parseInt(request.getParameter("sku_id").toString());
+        orderService.ordercancel(id);
+        return "ok";
+    }
+
     //立即支付
     @RequestMapping("paynow")
      public String payn(HttpServletRequest request, HttpServletResponse response, Model model){
