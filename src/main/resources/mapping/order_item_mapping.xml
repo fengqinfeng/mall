@@ -23,5 +23,8 @@
     <select id="selectitem" parameterType="int" resultMap="Order_infoResultMap">
         select * from order_item_info where order_item_id=#{order_item_id}
   </select>
+    <select id="seleorderid" parameterType="int" resultMap="Order_infoResultMap">
+        select * from order_item_info where order_id=#{order_id}
+  </select>
 
 </mapper>

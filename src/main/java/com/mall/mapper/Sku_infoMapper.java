@@ -15,4 +15,6 @@ public interface Sku_infoMapper {
     public int updateSale_number(@Param("0")int sale_number,
                                  @Param("1")int sku_id);
     public int selSale_Number(@Param("0")int sku_id);
+    public Sku_info seleall(@Param("0")int sku_id);
+    public int updateku(Sku_info skuinfo);
 }

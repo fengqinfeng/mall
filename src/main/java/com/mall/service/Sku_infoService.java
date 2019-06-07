@@ -11,6 +11,13 @@ import java.util.List;
 public class Sku_infoService {
     @Autowired
     Sku_infoMapper sku_infoMapper;
+    public int updateku(Sku_info skuinfo){
+        return sku_infoMapper.updateku(skuinfo);
+    }
+    public Sku_info seleall(int sku_id){
+        return sku_infoMapper.seleall(sku_id);
+    }
+
     public Sku_info showSku_info_Detail(int sku_id){
         return sku_infoMapper.showSku_info_Detail(sku_id);
     }

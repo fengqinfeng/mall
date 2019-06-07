@@ -28,7 +28,8 @@ public class COrder {
     public Ratings_Service ratingsService;
     @Autowired
     public Address_infoService address_infoService;
-
+    @Autowired
+    public Sku_infoService skuinfoservice;
     //删除订单
     @RequestMapping("deleorder")
     public String deleorder(HttpServletRequest request, HttpServletResponse response, Model model){
@@ -51,6 +52,7 @@ public class COrder {
      public String payn(HttpServletRequest request, HttpServletResponse response, Model model){
         int id=Integer.parseInt(request.getParameter("id").toString());
         int maxid=orderService.maxid();
+
         for(int i=id+1;i<=maxid;i++){
             orderService.payed(i,"1");
 
@@ -62,7 +64,28 @@ public class COrder {
     @RequestMapping("payo")
     public String payo(HttpServletRequest request, HttpServletResponse response, Model model){
         int id=Integer.parseInt(request.getParameter("id").toString());
+
+        List<Order_item_info>orderid=orderService.seleorderid(id);
+        //购买时 要检查库存问题，购买成功是减库存，加销量
+        //下标是商品id,值是购买数量
+        int kucun[]=new int[100];
+        for(int i=0;i<orderid.size();i++){
+            kucun[orderid.get(i).getSku_id()]+=orderid.get(i).getAmount();
+        }
+        for(int i=0;i<100;i++){
+            if(kucun[i]!=0){
+                Sku_info ans=skuinfoservice.seleall(i);
+                if(ans.getAmount()>=kucun[i]){
+                    ans.setAmount(ans.getAmount()-kucun[i]);
+                    ans.setSale_number(ans.getSale_number()+kucun[i]);
+                    skuinfoservice.updateku(ans);
+                }else{
+                    return "err";
+                }
+            }
+        }
         orderService.payed(id,"1");
+
         return "ok";
     }
 

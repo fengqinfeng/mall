@@ -23,6 +23,11 @@ public class OrderService {
     @Autowired Order_itemMapper order_itemMapper;
     @Autowired Sku_infoMapper sku_infoMapper;
 
+
+    public List<Order_item_info>seleorderid(int order_id){
+        return order_itemMapper.seleorderid(order_id);
+    }
+
     public int orderdele(int order_id)
     {
         return orderMapper.orderdele(order_id);

@@ -32,6 +32,14 @@
         <result column="price" jdbcType="VARCHAR" property="price" />
         <result column="class_id" jdbcType="VARCHAR" property="class_id" />
     </resultMap>
+    <resultMap id="Skuinfo" type="com.mall.entity.Sku_info">
+        <result column="sku_id" jdbcType="INTEGER" property="sku_id" />
+        <result column="product_class_id" jdbcType="INTEGER" property="product_class_id" />
+        <result column="price" jdbcType="VARCHAR" property="price" />
+        <result column="seller_id" jdbcType="INTEGER" property="seller_id" />
+        <result column="sale_number" jdbcType="INTEGER" property="sale_number" />
+        <result column="amount" jdbcType="INTEGER" property="amount" />
+    </resultMap>
     <select id="showSku_info_Detail" parameterType="int" resultMap="Sku_infoResultMap">
         SELECT k.sku_id, k.product_class_id, k.price, k.amount,k.seller_id, s.seller_name, p.product_class_name, i.p_image_path,
 			pp.is_sale_property, pp.property_name, pp.property_value
@@ -65,6 +73,15 @@
         select sale_Number from sku_info where
         sku_id = #{0}
     </select>
+    <select id="seleall" resultMap="Skuinfo">
+        select * from sku_info where
+        sku_id = #{0}
+    </select>
+    <update id="updateku">
+        update sku_info set amount = #{amount},sale_number=#{sale_number}
+        where sku_id=#{sku_id}
+    </update>
+
     <update id="updateSale_number">
         update sku_info set sale_number = #{0}
         where sku_id=#{1}
