@@ -143,7 +143,7 @@
       }
       var temp=$(".active").length;
       var prosum=$(".properr").length;
-      if(temp!=temp){
+      if(temp!=prosum){
         alert("请选择属性");
         return;
       }
@@ -176,6 +176,12 @@
     }
 
     function f() {
+      var temp=$(".active").length;
+      var prosum=$(".properr").length;
+      if(temp!=prosum){
+        alert("请选择属性");
+        return;
+      }
       var commodity_id=[[${sku_info.sku_id}]];
       var commodity_count=$('#count').val();
       var ans="";
