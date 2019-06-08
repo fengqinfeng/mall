@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.Random;
 
 public class Te {
+
+    //生成随机数据
     public static void main(String args[]){
         File file = new File("C:\\D\\课件\\企业级javaee\\推荐算法学习\\ml-latest-small\\ra.csv");
         if(!file.exists()){

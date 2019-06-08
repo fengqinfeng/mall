@@ -89,7 +89,8 @@
               <p class="address-box"><span>送&nbsp;&nbsp;&nbsp;&nbsp;至</span><strong class="address">江西&nbsp;&nbsp;南昌&nbsp;&nbsp;东湖区</strong></p>
             </div>
             <div class="choose-attrs">
-              <div class="color layui-clear" th:each="proper:${sku_info.product_property_infoList}"><span class="title properr"  th:if="${proper.is_sale_property}" th:text="${proper.property_name}">尺&nbsp;&nbsp;&nbsp;&nbsp;寸</span>
+              <div class="color layui-clear" th:each="proper:${sku_info.product_property_infoList}" th:if="${proper.is_sale_property eq 1}">
+                <span class="title properr"   th:text="${proper.property_name}"></span>
                 <div class="color-cont" >
                   <span class="btn sxbtn"  th:if="${#strings.contains(proper.property_value,'|')} " th:each="pinfo:${#strings.arraySplit(proper.property_value,'|')} "  th:text="${pinfo}"></span>
                 </div>
@@ -100,7 +101,7 @@
                   <input class="count" id="count" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" maxlength="4" type="" name="" value="1">
                   <span class="add btn">+</span>
                 </div>
-            </div>
+              </div>
 
             <div class="choose-btns">
               <button onclick="likebuy();" class="layui-btn layui-btn-primary purchase-btn">立刻购买</button>
@@ -114,7 +115,7 @@
           <h4>热销推荐</h4>
           <div class="item-list" th:each="recom:${recommendans}">
             <div class="item">
-              <img th:src="@{${recom.p_image_path}}" width="280px;" height="280px;">
+              <a th:href="'/show_sku_info_detail?sku_id='+ ${recom.sku_id}"><img th:src="@{${recom.p_image_path}}" width="280px;" height="280px;"></a>
               <p><span th:text="${recom.product_class_name}">可爱宝宝粉色连体秋裤</span><span class="pric" >￥<span th:text="${recom.price}"></span></span></p>
             </div>
           </div>

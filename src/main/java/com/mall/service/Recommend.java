@@ -60,9 +60,9 @@ public class Recommend {
             //打印推荐的结果
             //System.out.println("使用基于物品的协同过滤算法");
             //System.out.println("根据用户5当前浏览的商品2398，推荐10个相似的商品");
-//            for (RecommendedItem recommendedItem : recommendedItemList) {
-//                System.out.println(recommendedItem);
-//            }
+            for (RecommendedItem recommendedItem : recommendedItemList){
+                System.out.println(recommendedItem);
+            }
 //            long start = System.currentTimeMillis();
             return recommendedItemList;
         }catch (IOException e){

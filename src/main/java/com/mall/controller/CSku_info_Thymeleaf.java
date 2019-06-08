@@ -40,7 +40,6 @@ public class CSku_info_Thymeleaf {
         if(request.getSession().getAttribute("user_id")!=null){
             userid=(int)request.getSession().getAttribute("user_id");
         }
-
         //Sku_info skuinfo=sku_info.get(0);
         //String[] prodcut_property_values = sku_info.getProduct_property_infoList().get(0).getProperty_value().split("\\|");
         //model.addAttribute("arr_ppv", prodcut_property_values);
@@ -54,24 +53,20 @@ public class CSku_info_Thymeleaf {
             else{
                 ans=recommendservice.recommend(userid,sku_id);
             }
-
             List<Sku_info>recommendans=new ArrayList<Sku_info> ();;
-
             for (int i=0;i<ans.size();i++){
-                System.out.println("id="+ans.get(i).getItemID()+" value="+ans.get(i).getValue());
+                //System.out.println("id="+ans.get(i).getItemID()+" value="+ans.get(i).getValue());
                 Sku_info temp=sku_infoService.showSku_info_Detail((int)ans.get(i).getItemID());
                 recommendans.add(temp);
             }
-            System.out.println(recommendans);
+            //System.out.println(recommendans);
             for(int i=0;i<recommendans.size();i++){
-                System.out.println(recommendans.get(i).getSku_id()+" "+recommendans.get(i).getP_image_path());
+                //System.out.println(recommendans.get(i).getSku_id()+" "+recommendans.get(i).getP_image_path());
             }
             model.addAttribute("recommendans",recommendans);
         }catch (Exception e){
             System.out.println(e);
         }
-
-
         return "details";
     }
     @RequestMapping("all_commodity")
