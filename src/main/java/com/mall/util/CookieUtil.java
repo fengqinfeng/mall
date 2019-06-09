@@ -32,7 +32,7 @@ public class CookieUtil {//get和set分别是从cookie里面读取数据和写�
         }
         Cookie cookie = new Cookie(cookieName, value);
         cookie.setPath("/");
-        cookie.setMaxAge(60);
+        cookie.setMaxAge(3600);
         response.addCookie(cookie);
     }
 }

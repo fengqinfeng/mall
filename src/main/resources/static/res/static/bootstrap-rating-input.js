@@ -152,5 +152,15 @@
       $('input.rating[type=number]').rating();
     }
   });
+  $(function () {
+    if ($('input.rating2[type=number]').length > 0) {
+      $('input.rating2[type=number]').rating();
+    }
+  });
+  $(function () {
+    if ($('input.rating3[type=number]').length > 0) {
+      $('input.rating3[type=number]').rating();
+    }
+  });
 
 }(jQuery));

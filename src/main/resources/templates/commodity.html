@@ -74,7 +74,7 @@
           <div class="list-box">
             <dl th:each="classinfo,classinfoStat:${classinfo}" >
               <dt th:if="${classinfo.class_id.length()==2}" th:text="${classinfo.class_name}"></dt>
-              <dd><a href="javascript:;" th:if="${classinfo.class_id.length()==4}" th:text="${classinfo.class_name}"></a></dd>
+              <dd><a th:href="@{qry_sku_info(class_id=${classinfo.class_id},sortField=sale_number,sortMode=desc)}" th:if="${classinfo.class_id.length()==4}" th:text="${classinfo.class_name}"></a></dd>
 
             </dl>
           </div>

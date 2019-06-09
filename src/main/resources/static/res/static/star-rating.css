@@ -6,7 +6,6 @@
     vertical-align: top;
     margin-top: 2px;
 }
-
 .full-star {
     overflow: hidden; width: 19px; height: 19px;
     background-image: url(img/full_star.png);
@@ -14,7 +13,6 @@
     vertical-align: top;
     margin-top: 2px;
 }
-
 .rating-input {
     height: 25px;
 }

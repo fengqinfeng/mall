@@ -140,13 +140,20 @@ public class CBuyCart {
         if (user_name == null){//说明用户没有登录。去cookie里面找购物车信息json字符串信息。
             //利用buyerCart字符串作为键名，写死了。可以自己灵活修改。
             // 购物车的值作为键值。
-            buyerCartValue = CookieUtil.getCookie(request, "buyerCart");
+            //if(CookieUtil.getCookie(request, "buyerCart")!=null){
+                buyerCartValue = CookieUtil.getCookie(request, "buyerCart");
+            //}
+
            // System.out.println(buyerCartValue);
         }
         else{//用户登录了。则去数据库或者redis里面进行获取购物车信息。
             //利用用户名作为键名，购物车的值作为键值。
+
             redisUtil = (RedisUtil) SpringUtil.applicationContext.getBean("redisUtil");//从spring容器里面得到一个对象
-            buyerCartValue = redisUtil.get(user_name);
+            if(redisUtil.get(user_name)!=null){
+                buyerCartValue = redisUtil.get(user_name);
+            }
+
         }
 
         if(buyerCartValue!=null){//说明存在购物车字符串键值，取出来反序列化成购物车对象。

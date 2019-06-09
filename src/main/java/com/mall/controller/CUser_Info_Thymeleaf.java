@@ -45,7 +45,6 @@ public class CUser_Info_Thymeleaf {
         //index页面分成登录和没登录2种情况。没登录商品存cookie，登录存redis。
         List<Class_info>ans =new ArrayList<Class_info>();
         ans=classinfoservice.class_all();
-
         BuyerCart buyerCart = new BuyerCart();
         String user_name = null;
         String buyerCartValue = null;
@@ -63,10 +62,8 @@ public class CUser_Info_Thymeleaf {
             redisUtil = (RedisUtil) SpringUtil.applicationContext.getBean("redisUtil");//从spring容器里面得到一个对象
             buyerCartValue = redisUtil.get(user_name);
         }
-
         if(buyerCartValue!=null){//说明存在购物车字符串键值，取出来反序列化成购物车对象。
             buyerCart = JSON.parseObject(buyerCartValue, new TypeReference<BuyerCart>(){});
-
         }
         int sum=0;
         for(int i=0;i<buyerCart.getItems().size();i++){
@@ -74,9 +71,9 @@ public class CUser_Info_Thymeleaf {
                 sum++;
             }
         }
+        if(buyerCartValue==null)sum=0;
         model.addAttribute("sum",sum);
         model.addAttribute("ans",ans);
-
          return "index";
     }
     @RequestMapping("checklogin")

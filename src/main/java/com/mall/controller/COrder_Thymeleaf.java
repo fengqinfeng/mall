@@ -86,8 +86,18 @@ public class COrder_Thymeleaf {
     public String showOrder2(HttpServletRequest request, Model model, @RequestParam(required = false,defaultValue = "1",value = "pn")Integer pn,
                              Map<String,Object> map){
         //根据用户的id或者姓名，取得默认地址。显示在界面上。
-        int user_id = Integer.parseInt(request.getSession().getAttribute("user_id").toString());
-        String user_name = request.getSession().getAttribute("user_name").toString();
+
+        int user_id=0;
+        String user_name;
+        if(request.getSession().getAttribute("user_id")!=null){
+            user_id = Integer.parseInt(request.getSession().getAttribute("user_id").toString());
+        }
+        if(request.getSession().getAttribute("user_name")!=null){
+            user_name = request.getSession().getAttribute("user_name").toString();
+        }
+        if(user_id==0){
+            return "login";
+        }
 
         PageHelper.startPage(pn,10);
         List<Order_info> ans=orderService.showorderbysql(user_id);

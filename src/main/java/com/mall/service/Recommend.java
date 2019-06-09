@@ -17,7 +17,7 @@ public class Recommend {
     public List<RecommendedItem> recommend(long userid,long itemid)throws Exception{
         DataModel dataModel=null;
         try {
-            File file = new File("ratings.dat");
+            //File file = new File("ratings.dat");
             //将数据加载到内存中，GroupLensDataModel是针对开放电影评论数据的
             dataModel = new FileDataModel(new File("C:\\D\\课件\\企业级javaee\\推荐算法学习\\ml-latest-small\\ra.csv"));
             //计算相似度

@@ -57,14 +57,14 @@
             <input  type="number" name="your_awesome_parameter" id="some_id" class="rating"
                 data-caption="['较差', '还行', '还行', '推荐', '力荐']" value="" data-min="1" data-max="5" />
         </p>
-        <p style="margin-left: 275px;margin-top:-6px;">卖家服务态度:
-                <input  type="number" name="your_awesome_parameter" id="some_id2" class="rating"
-                    data-caption="['较差', '还行', '还行', '推荐', '力荐']" value="" data-min="1" data-max="5" />
-            </p>
-            <p style="margin-left: 275px;margin-top:-6px;">物流服务质量:
-                    <input  type="number" name="your_awesome_parameter" id="some_id3" class="rating"
-                        data-caption="['较差', '还行', '还行', '推荐', '力荐']" value="" data-min="1" data-max="5" />
-                </p>
+        <!--<p style="margin-left: 275px;margin-top:-6px;">卖家服务态度:-->
+                <!--<input  type="number" name="your_awesome_parameter" id="some_id2" class="rating2"-->
+                    <!--data-caption="['较差', '还行', '还行', '推荐', '力荐']" value="" data-min="1" data-max="5" />-->
+            <!--</p>-->
+            <!--<p style="margin-left: 275px;margin-top:-6px;">物流服务质量:-->
+                    <!--<input  type="number" name="your_awesome_parameter" id="some_id3" class="rating3"-->
+                        <!--data-caption="['较差', '还行', '还行', '推荐', '力荐']" value="" data-min="1" data-max="5" />-->
+                <!--</p>-->
     </div>
     <button th:onclick="'javascript:fx('+this+','+${sku.sku_id}+','+${orderitem.order_item_id}+','+${orderitem.order_id}+');'" type="button" class="btn btn-primary" style="margin-top: 580px;margin-left:-480px;">发表评论</button>
     <div style="height: 200px;">
@@ -78,16 +78,16 @@
                 ans=$(this).val();
             });
         });
-        $(function () {
-            $('#some_id2').on('change', function () {
-                //alert($(this).val())
-            });
-        });
-        $(function () {
-            $('#some_id3').on('change', function () {
-                //alert($(this).val())
-            });
-        });
+        // $(function () {
+        //     $('#some_id2').on('change', function () {
+        //         //alert($(this).val())
+        //     });
+        // });
+        // $(function () {
+        //     $('#some_id3').on('change', function () {
+        //         //alert($(this).val())
+        //     });
+        // });
         function fx(obj,skuid,itemid,orderid) {
             $.ajax({
                 url:"eva_ing",
